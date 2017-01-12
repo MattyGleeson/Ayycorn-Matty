@@ -126,14 +126,15 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\SelectionBoxController.cs" />
     <Compile Include="Data\AyycornDb.cs" />
-    <Compile Include="Data\FakeDb.cs" />
     <Compile Include="Data\Product.cs" />
     <Compile Include="Data\SelectionBox.cs" />
     <Compile Include="Data\SelectionBoxProduct.cs" />
+    <Compile Include="Data\SelBoxDbSet.cs" />
+    <Compile Include="Data\Test\TestDbContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Interfaces\DbInterface.cs" />
+    <Compile Include="Interfaces\IDbContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
