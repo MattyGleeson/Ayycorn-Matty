@@ -32,12 +32,12 @@ namespace SelectionBoxService.Tests
         {
             IEnumerable<SelectionBox> Boxes = new List<SelectionBox>()
             {
-                new SelectionBox() { Id = 1, Total = 10.0, Wrapping = "Paper", Removed = false, Visible = true, Available = true },
-                new SelectionBox() { Id = 2, Total = 10.0, Wrapping = "Paper", Removed = false, Visible = true, Available = true },
-                new SelectionBox() { Id = 3, Total = 10.0, Wrapping = "Paper", Removed = false, Visible = true, Available = true },
-                new SelectionBox() { Id = 4, Total = 10.0, Wrapping = "Paper", Removed = false, Visible = true, Available = true },
-                new SelectionBox() { Id = 5, Total = 10.0, Wrapping = "Paper", Removed = false, Visible = true, Available = true },
-                new SelectionBox() { Id = 6, Total = 10.0, Wrapping = "Paper", Removed = false, Visible = true, Available = true }
+                new SelectionBox() { Id = 1, Total = 10.0, WrappingId = 1, WrappingRangeId = 1, WrappingRangeName = "Swirl-Tastic", WrappingTypeId = 1, WrappingTypeName = "Gift Bag", Removed = false, Visible = true, Available = true },
+                new SelectionBox() { Id = 2, Total = 10.0, WrappingId = 1, WrappingRangeId = 1, WrappingRangeName = "Swirl-Tastic", WrappingTypeId = 1, WrappingTypeName = "Gift Bag", Removed = false, Visible = true, Available = true },
+                new SelectionBox() { Id = 3, Total = 10.0, WrappingId = 2, WrappingRangeId = 1, WrappingRangeName = "Swirl-Tastic", WrappingTypeId = 1, WrappingTypeName = "Gift Bag", Removed = false, Visible = true, Available = true },
+                new SelectionBox() { Id = 4, Total = 10.0, WrappingId = 2, WrappingRangeId = 1, WrappingRangeName = "Swirl-Tastic", WrappingTypeId = 1, WrappingTypeName = "Gift Bag", Removed = false, Visible = true, Available = true },
+                new SelectionBox() { Id = 5, Total = 10.0, WrappingId = 3, WrappingRangeId = 1, WrappingRangeName = "Swirl-Tastic", WrappingTypeId = 1, WrappingTypeName = "Gift Bag", Removed = false, Visible = true, Available = true },
+                new SelectionBox() { Id = 6, Total = 10.0, WrappingId = 3, WrappingRangeId = 1, WrappingRangeName = "Swirl-Tastic", WrappingTypeId = 1, WrappingTypeName = "Gift Bag", Removed = false, Visible = true, Available = true }
             };
 
             IEnumerable<Product> Products = new List<Product>()
@@ -214,7 +214,11 @@ namespace SelectionBoxService.Tests
             {
                 Id = 7,
                 Total = 10.0,
-                Wrapping = "Paper",
+                WrappingId = 1,
+                WrappingRangeId = 1,
+                WrappingRangeName = "Swirl-Tastic",
+                WrappingTypeId = 1,
+                WrappingTypeName = "Gift Bag",
                 Removed = false,
                 Visible = true,
                 Available = true
@@ -233,7 +237,11 @@ namespace SelectionBoxService.Tests
             {
                 Id = 7,
                 Total = 10.0,
-                Wrapping = "Paper",
+                WrappingId = 1,
+                WrappingRangeId = 1,
+                WrappingRangeName = "Swirl-Tastic",
+                WrappingTypeId = 1,
+                WrappingTypeName = "Gift Bag",
                 Removed = false,
                 Visible = true,
                 Available = true,
@@ -263,7 +271,11 @@ namespace SelectionBoxService.Tests
             {
                 Id = 8,
                 Total = 10.0,
-                Wrapping = "Paper",
+                WrappingId = 1,
+                WrappingRangeId = 1,
+                WrappingRangeName = "Swirl-Tastic",
+                WrappingTypeId = 1,
+                WrappingTypeName = "Gift Bag",
                 Removed = false,
                 Visible = true,
                 Available = true,
@@ -299,7 +311,11 @@ namespace SelectionBoxService.Tests
             {
                 Id = 9,
                 Total = 10.0,
-                Wrapping = "Paper",
+                WrappingId = 1,
+                WrappingRangeId = 1,
+                WrappingRangeName = "Swirl-Tastic",
+                WrappingTypeId = 1,
+                WrappingTypeName = "Gift Bag",
                 Removed = false,
                 Visible = true,
                 Available = true,
@@ -329,7 +345,11 @@ namespace SelectionBoxService.Tests
             {
                 Id = 1,
                 Total = 10.0,
-                Wrapping = "Paper",
+                WrappingId = 1,
+                WrappingRangeId = 1,
+                WrappingRangeName = "Swirl-Tastic",
+                WrappingTypeId = 1,
+                WrappingTypeName = "Gift Bag",
                 Removed = false,
                 Visible = true,
                 Available = false
@@ -345,7 +365,11 @@ namespace SelectionBoxService.Tests
             {
                 Id = 2,
                 Total = 10.0,
-                Wrapping = "Paper",
+                WrappingId = 1,
+                WrappingRangeId = 1,
+                WrappingRangeName = "Swirl-Tastic",
+                WrappingTypeId = 1,
+                WrappingTypeName = "Gift Bag",
                 Removed = false,
                 Visible = false,
                 Available = true
@@ -361,7 +385,11 @@ namespace SelectionBoxService.Tests
             {
                 Id = 3,
                 Total = 10.0,
-                Wrapping = "Paper",
+                WrappingId = 1,
+                WrappingRangeId = 1,
+                WrappingRangeName = "Swirl-Tastic",
+                WrappingTypeId = 1,
+                WrappingTypeName = "Gift Bag",
                 Removed = false,
                 Visible = false,
                 Available = false
@@ -377,7 +405,11 @@ namespace SelectionBoxService.Tests
             {
                 Id = 4,
                 Total = 10.0,
-                Wrapping = "Paper",
+                WrappingId = 1,
+                WrappingRangeId = 1,
+                WrappingRangeName = "Swirl-Tastic",
+                WrappingTypeId = 1,
+                WrappingTypeName = "Gift Bag",
                 Removed = false,
                 Visible = true,
                 Available = true

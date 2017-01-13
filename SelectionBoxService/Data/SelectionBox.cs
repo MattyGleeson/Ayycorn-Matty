@@ -19,9 +19,7 @@ namespace SelectionBoxService.Data
 
         public double Total { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        public string Wrapping { get; set; }
+        public int WrappingTypeId { get; set; }
 
         public bool? Available { get; set; }
 
@@ -31,7 +29,15 @@ namespace SelectionBoxService.Data
 
         [Required]
         [StringLength(20)]
-        public string WrappingType { get; set; }
+        public string WrappingTypeName { get; set; }
+
+        [Required]
+        [StringLength(20)]
+        public string WrappingRangeName { get; set; }
+
+        public int WrappingRangeId { get; set; }
+
+        public int WrappingId { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SelectionBoxProduct> SelectionBoxProducts { get; set; }

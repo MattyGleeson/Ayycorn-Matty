@@ -4,9 +4,8 @@ namespace SelectionBoxService.Data
     using System.Data.Entity;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
-    using Interfaces;
 
-    public partial class AyycornDb : DbContext, IDbContext
+    public partial class AyycornDb : DbContext
     {
         public AyycornDb()
             : base("name=AyycornDb")
@@ -19,9 +18,6 @@ namespace SelectionBoxService.Data
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<SelectionBox>()
-                .Property(e => e.WrappingType)
-                .IsFixedLength();
         }
 
         public virtual void SetModified(object entity)

@@ -9,7 +9,11 @@ namespace LibAyycorn.Dtos
     {
         public virtual int Id { get; set; }
         public virtual double Total { get; set; }
-        public virtual string Wrapping { get; set; }
+        public virtual int WrappingId { get; set; }
+        public virtual int WrappingTypeId { get; set; }
+        public virtual string WrappingTypeName { get; set; }
+        public virtual int WrappingRangeId { get; set; }
+        public virtual string WrappingRangeName { get; set; }
         public virtual bool Removed { get; set; }
         public virtual bool Visible { get; set; }
         public virtual bool Available { get; set; }

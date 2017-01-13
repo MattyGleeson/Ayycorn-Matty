@@ -43,7 +43,11 @@ namespace SelectionBoxService.Controllers
             {
                 Id = b.Id,
                 Total = b.Total,
-                Wrapping = b.Wrapping,
+                WrappingId = b.WrappingId,
+                WrappingRangeId = b.WrappingRangeId,
+                WrappingRangeName = b.WrappingRangeName,
+                WrappingTypeId = b.WrappingTypeId,
+                WrappingTypeName = b.WrappingTypeName,
                 Removed = b.Removed == false ? false : true,
                 Visible = b.Visible == false ? false : true,
                 Available = b.Available == false ? false : true,
@@ -79,11 +83,14 @@ namespace SelectionBoxService.Controllers
         {
             try
             {
-
                 Data.SelectionBox newSelectionBox = db.SelectionBoxes.Add(new Data.SelectionBox
                 {
                     Total = gb.Total,
-                    Wrapping = gb.Wrapping,
+                    WrappingId = gb.WrappingId,
+                    WrappingRangeId = gb.WrappingRangeId,
+                    WrappingRangeName = gb.WrappingRangeName,
+                    WrappingTypeId = gb.WrappingTypeId,
+                    WrappingTypeName = gb.WrappingTypeName,
                     Removed = gb.Removed,
                     Visible = gb.Visible,
                     Available = gb.Available,
