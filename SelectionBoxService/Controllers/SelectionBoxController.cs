@@ -27,7 +27,11 @@ namespace SelectionBoxService.Controllers
             this.db = db;
         }
 
-        [Route("service/GetBoxes")]
+        /// <summary>
+        /// Gets all selection boxes from the database
+        /// </summary>
+        /// <returns></returns>
+        [Route("getboxes")]
         [HttpGet]
         public async Task<HttpResponseMessage> GetAllSelectionBoxes()
         {
@@ -64,7 +68,12 @@ namespace SelectionBoxService.Controllers
             return Enumerable.Empty<LibAyycorn.Dtos.Product>();
         }
 
-        [Route("service/PostBox")]
+        /// <summary>
+        /// Posts a selection box Dto to the database
+        /// </summary>
+        /// <param name="gb"></param>
+        /// <returns></returns>
+        [Route("postbox")]
         [HttpPost]
         public async Task<HttpResponseMessage> PostSelectionBox(LibAyycorn.Dtos.SelectionBox gb)
         {
@@ -121,18 +130,21 @@ namespace SelectionBoxService.Controllers
             }
         }
 
-        [Route("service/DeleteBox/{id:int?}")]
+        /// <summary>
+        /// Removes a selection box
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("deletebox/{id:int?}")]
         [HttpDelete]
         public async Task<HttpResponseMessage> DeleteSelectionBox(int id)
         {
             try
             {
                 Data.SelectionBox selectionBox = await db.SelectionBoxes.Where(sb => sb.Id == id).FirstOrDefaultAsync();
-                db.SelectionBoxes.SetSBRemoved(selectionBox);
-                //selectionBox.Removed = true;
+                selectionBox.Removed = true;
 
                 db.SetModified(selectionBox);
-                //db.Entry(selectionBox).State = EntityState.Modified;
                 await db.SaveChangesAsync();
 
                 return Request.CreateResponse(HttpStatusCode.OK, "Success");
@@ -144,7 +156,13 @@ namespace SelectionBoxService.Controllers
             }
         }
 
-        [Route("service/UpdateBox/{id:int?}")]
+        /// <summary>
+        /// Puts a selection box to the database. Allows updating of the available and visible properties.
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="postObject"></param>
+        /// <returns></returns>
+        [Route("updatebox/{id:int?}")]
         [HttpPut]
         public async Task<HttpResponseMessage> UpdateSelectionBox(int Id, LibAyycorn.Dtos.SelectionBox postObject)
         {
@@ -152,24 +170,15 @@ namespace SelectionBoxService.Controllers
             {
                 Data.SelectionBox selectionBox = await db.SelectionBoxes.Where(sb => sb.Id == Id).FirstOrDefaultAsync();
 
+                selectionBox.Available = selectionBox.Available != postObject.Available 
+                    ? postObject.Available 
+                    : selectionBox.Available;
 
-
-                if (selectionBox.Available != postObject.Available)
-                    db.SelectionBoxes.SetSBAvailable(selectionBox, postObject.Available);
-
-                if (selectionBox.Visible != postObject.Visible)
-                    db.SelectionBoxes.SetSBVisible(selectionBox, postObject.Visible);
-
-                //selectionBox.Available = (selectionBox.Available != postObject.Available) ?
-                //    postObject.Available :
-                //    selectionBox.Available;
-
-                //selectionBox.Visible = (selectionBox.Visible != postObject.Visible) ?
-                //    postObject.Visible :
-                //    selectionBox.Visible;
+                selectionBox.Visible = selectionBox.Visible != postObject.Visible 
+                    ? postObject.Visible 
+                    : selectionBox.Visible;
 
                 db.SetModified(selectionBox);
-                //db.Entry(selectionBox).State = EntityState.Modified;
                 await db.SaveChangesAsync();
 
                 return Request.CreateResponse(HttpStatusCode.OK, "Success");

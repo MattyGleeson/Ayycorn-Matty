@@ -23,7 +23,7 @@ namespace SelectionBoxService.Tests
         private SelectionBoxController Controller;
         private Mock<AyycornDb> MockDb;
         private AyycornDb Db;
-        private Mock<SelBoxDbSet<SelectionBox>> MockBoxesSet;
+        private Mock<DbSet<SelectionBox>> MockBoxesSet;
         private Mock<DbSet<Product>> MockProductsSet;
         private Mock<DbSet<SelectionBoxProduct>> MockBoxProductsSet;
 
@@ -71,7 +71,7 @@ namespace SelectionBoxService.Tests
             //MockProductsSet = GenerateMockDbSet<Product>(ProductsData);
             //MockBoxProductsSet = GenerateMockDbSet<SelectionBoxProduct>(BoxProductsData);
 
-            MockBoxesSet = new Mock<SelBoxDbSet<SelectionBox>>();
+            MockBoxesSet = new Mock<DbSet<SelectionBox>>();
             MockBoxesSet.As<IDbAsyncEnumerable<SelectionBox>>().Setup(m => m.GetAsyncEnumerator()).Returns(new TestDbAsyncEnumerator<SelectionBox>(BoxesData.GetEnumerator()));
             MockBoxesSet.As<IQueryable<SelectionBox>>().Setup(m => m.Provider).Returns(new TestDbAsyncQueryProvider<SelectionBox>(BoxesData.Provider));
             MockBoxesSet.As<IQueryable>().Setup(m => m.Provider).Returns(new TestDbAsyncQueryProvider<SelectionBox>(BoxesData.Provider));
@@ -79,9 +79,6 @@ namespace SelectionBoxService.Tests
             MockBoxesSet.As<IQueryable<SelectionBox>>().Setup(m => m.ElementType).Returns(BoxesData.ElementType);
             MockBoxesSet.As<IQueryable<SelectionBox>>().Setup(m => m.GetEnumerator()).Returns(BoxesData.GetEnumerator());
             MockBoxesSet.Setup(m => m.Add(It.IsAny<SelectionBox>())).Returns((SelectionBox r) => r);
-            MockBoxesSet.Setup(m => m.SetSBAvailable(It.IsAny<SelectionBox>(), It.IsAny<bool>())).Verifiable();
-            MockBoxesSet.Setup(m => m.SetSBVisible(It.IsAny<SelectionBox>(), It.IsAny<bool>())).Verifiable();
-            MockBoxesSet.Setup(m => m.SetSBRemoved(It.IsAny<SelectionBox>())).Verifiable();
 
             MockProductsSet = new Mock<DbSet<Product>>();
             MockProductsSet.As<IDbAsyncEnumerable<Product>>().Setup(m => m.GetAsyncEnumerator()).Returns(new TestDbAsyncEnumerator<Product>(ProductsData.GetEnumerator()));
@@ -156,6 +153,58 @@ namespace SelectionBoxService.Tests
             Assert.IsTrue(response.TryGetContentValue(out selectionBoxes));
             Assert.AreEqual(selectionBoxes.Count(), dbSelectionBoxes.Count());
             Assert.IsTrue(true);
+        }
+
+        [TestMethod]
+        public async Task TestGetNoData()
+        {
+            IEnumerable<SelectionBox> Boxes = new List<SelectionBox>(){ };
+            IEnumerable<Product> Products = new List<Product>() { };
+            IEnumerable<SelectionBoxProduct> SBProducts = new List<SelectionBoxProduct>() { };
+            IQueryable<SelectionBox> BoxesData = Boxes.AsQueryable();
+            IQueryable<Product> ProductsData = Products.AsQueryable();
+            IQueryable<SelectionBoxProduct> BoxProductsData = SBProducts.AsQueryable();
+            
+            Mock<DbSet<SelectionBox>> MockBoxesSet = new Mock<DbSet<SelectionBox>>();
+            MockBoxesSet.As<IDbAsyncEnumerable<SelectionBox>>().Setup(m => m.GetAsyncEnumerator()).Returns(new TestDbAsyncEnumerator<SelectionBox>(BoxesData.GetEnumerator()));
+            MockBoxesSet.As<IQueryable<SelectionBox>>().Setup(m => m.Provider).Returns(new TestDbAsyncQueryProvider<SelectionBox>(BoxesData.Provider));
+            MockBoxesSet.As<IQueryable>().Setup(m => m.Provider).Returns(new TestDbAsyncQueryProvider<SelectionBox>(BoxesData.Provider));
+            MockBoxesSet.As<IQueryable<SelectionBox>>().Setup(m => m.Expression).Returns(BoxesData.Expression);
+            MockBoxesSet.As<IQueryable<SelectionBox>>().Setup(m => m.ElementType).Returns(BoxesData.ElementType);
+            MockBoxesSet.As<IQueryable<SelectionBox>>().Setup(m => m.GetEnumerator()).Returns(BoxesData.GetEnumerator());
+
+            Mock<DbSet<Product>> MockProductsSet = new Mock<DbSet<Product>>();
+            MockProductsSet.As<IDbAsyncEnumerable<Product>>().Setup(m => m.GetAsyncEnumerator()).Returns(new TestDbAsyncEnumerator<Product>(ProductsData.GetEnumerator()));
+            MockProductsSet.As<IQueryable<Product>>().Setup(m => m.Provider).Returns(new TestDbAsyncQueryProvider<Product>(ProductsData.Provider));
+            MockProductsSet.As<IQueryable>().Setup(m => m.Provider).Returns(new TestDbAsyncQueryProvider<Product>(ProductsData.Provider));
+            MockProductsSet.As<IQueryable<Product>>().Setup(m => m.Expression).Returns(ProductsData.Expression);
+            MockProductsSet.As<IQueryable<Product>>().Setup(m => m.ElementType).Returns(ProductsData.ElementType);
+            MockProductsSet.As<IQueryable<Product>>().Setup(m => m.GetEnumerator()).Returns(ProductsData.GetEnumerator());
+
+
+            Mock<DbSet<SelectionBoxProduct>> MockBoxProductsSet = new Mock<DbSet<SelectionBoxProduct>>();
+            MockBoxProductsSet.As<IDbAsyncEnumerable<SelectionBoxProduct>>().Setup(m => m.GetAsyncEnumerator()).Returns(new TestDbAsyncEnumerator<SelectionBoxProduct>(BoxProductsData.GetEnumerator()));
+            MockBoxProductsSet.As<IQueryable<SelectionBoxProduct>>().Setup(m => m.Provider).Returns(new TestDbAsyncQueryProvider<SelectionBoxProduct>(BoxProductsData.Provider));
+            MockBoxProductsSet.As<IQueryable>().Setup(m => m.Provider).Returns(new TestDbAsyncQueryProvider<SelectionBoxProduct>(BoxProductsData.Provider));
+            MockBoxProductsSet.As<IQueryable<SelectionBoxProduct>>().Setup(m => m.Expression).Returns(BoxProductsData.Expression);
+            MockBoxProductsSet.As<IQueryable<SelectionBoxProduct>>().Setup(m => m.ElementType).Returns(BoxProductsData.ElementType);
+            MockBoxProductsSet.As<IQueryable<SelectionBoxProduct>>().Setup(m => m.GetEnumerator()).Returns(BoxProductsData.GetEnumerator());
+
+            Mock<AyycornDb> MockDb = new Mock<AyycornDb>();
+            MockDb.Setup(m => m.SelectionBoxes).Returns(MockBoxesSet.Object);
+            MockDb.Setup(m => m.Products).Returns(MockProductsSet.Object);
+            MockDb.Setup(m => m.SelectionBoxProducts).Returns(MockBoxProductsSet.Object);
+
+            SelectionBoxController Controller = new SelectionBoxController(MockDb.Object)
+            {
+                Request = new HttpRequestMessage(),
+                Configuration = new HttpConfiguration()
+            };
+
+            HttpResponseMessage response = await Controller.GetAllSelectionBoxes();
+
+            Assert.IsTrue(response.IsSuccessStatusCode);
+            Assert.AreEqual(response.StatusCode, HttpStatusCode.NoContent);
         }
 
         [TestMethod]
@@ -287,9 +336,6 @@ namespace SelectionBoxService.Tests
             });
 
             Assert.IsTrue(response.IsSuccessStatusCode);
-
-            MockBoxesSet.Verify(m => m.SetSBAvailable(It.IsAny<SelectionBox>(), It.IsAny<bool>()), Times.Once);
-            MockBoxesSet.Verify(m => m.SetSBVisible(It.IsAny<SelectionBox>(), It.IsAny<bool>()), Times.Never);
         }
 
         [TestMethod]
@@ -306,9 +352,6 @@ namespace SelectionBoxService.Tests
             });
 
             Assert.IsTrue(response.IsSuccessStatusCode);
-
-            MockBoxesSet.Verify(m => m.SetSBAvailable(It.IsAny<SelectionBox>(), It.IsAny<bool>()), Times.Never);
-            MockBoxesSet.Verify(m => m.SetSBVisible(It.IsAny<SelectionBox>(), It.IsAny<bool>()), Times.Once);
         }
 
         [TestMethod]
@@ -325,9 +368,6 @@ namespace SelectionBoxService.Tests
             });
 
             Assert.IsTrue(response.IsSuccessStatusCode);
-
-            MockBoxesSet.Verify(m => m.SetSBAvailable(It.IsAny<SelectionBox>(), It.IsAny<bool>()), Times.Once);
-            MockBoxesSet.Verify(m => m.SetSBVisible(It.IsAny<SelectionBox>(), It.IsAny<bool>()), Times.Once);
         }
 
         [TestMethod]
@@ -344,9 +384,6 @@ namespace SelectionBoxService.Tests
             });
 
             Assert.IsTrue(response.IsSuccessStatusCode);
-
-            MockBoxesSet.Verify(m => m.SetSBAvailable(It.IsAny<SelectionBox>(), It.IsAny<bool>()), Times.Never);
-            MockBoxesSet.Verify(m => m.SetSBVisible(It.IsAny<SelectionBox>(), It.IsAny<bool>()), Times.Never);
         }
 
         [TestMethod]
@@ -355,8 +392,6 @@ namespace SelectionBoxService.Tests
             HttpResponseMessage response = await Controller.DeleteSelectionBox(5);
 
             Assert.IsTrue(response.IsSuccessStatusCode);
-
-            MockBoxesSet.Verify(m => m.SetSBRemoved(It.IsAny<SelectionBox>()), Times.Once);
         }
 
     }

@@ -14,7 +14,7 @@ namespace SelectionBoxService.Data
         }
 
         public virtual DbSet<Product> Products { get; set; }
-        public virtual SelBoxDbSet<SelectionBox> SelectionBoxes { get; set; }
+        public virtual DbSet<SelectionBox> SelectionBoxes { get; set; }
         public virtual DbSet<SelectionBoxProduct> SelectionBoxProducts { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
