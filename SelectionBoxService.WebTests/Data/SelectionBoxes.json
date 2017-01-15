@@ -1,0 +1,25 @@
+﻿[
+  {
+    "Total": 30,
+    "WrappingId": 1,
+    "WrappingTypeId": 1,
+    "WrappingTypeName": "Test Wrap",
+    "WrappingRangeId": "1",
+    "WrappingRangeName": "test Range",
+    "Removed": false,
+    "Visible": true,
+    "Available": true,
+    "Products": [
+      {
+        "Id": 1,
+        "Name": "Prod 1",
+        "StoreName": "Test Store"
+      },
+      {
+        "Id": 2,
+        "Name": "Prod 2",
+        "StoreName": "Test Store"
+      }
+    ]
+  }
+]
