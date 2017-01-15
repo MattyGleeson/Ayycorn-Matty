@@ -23,7 +23,7 @@ namespace SelectionBoxService.Tests.Tests
         {
             HttpResponseMessage response = await Controller.GetAllSelectionBoxes();
 
-            IEnumerable<LibAyycorn.Dtos.SelectionBox> selectionBoxes;
+            IEnumerable<LibAyycorn.Dtos.Giftbox> selectionBoxes;
             IEnumerable<SelectionBox> dbSelectionBoxes = MockDb.Object.SelectionBoxes.ToList();
 
             Assert.IsTrue(response.TryGetContentValue(out selectionBoxes));

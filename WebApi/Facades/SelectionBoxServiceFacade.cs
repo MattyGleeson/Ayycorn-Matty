@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -13,91 +14,90 @@ namespace WebApi.Facades
     public class SelectionBoxServiceFacade : ApiController
     {
         private readonly HttpClient client;
+        private readonly string BaseUrl = "http://ayycornselectionboxservice.azurewebsites.net/";
         protected JsonSerializerSettings SerializerSettings;
 
         public SelectionBoxServiceFacade()
         {
             client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             SerializerSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore };
         }
 
         public SelectionBoxServiceFacade(HttpClient client)
         {
             this.client = client;
+            SerializerSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore };
         }
 
-        /// <summary>
-        /// Gets all selection boxes.
-        /// </summary>
-        /// <returns></returns>
-        public async Task<IQueryable<LibAyycorn.Dtos.SelectionBox>> GetSelectionBoxes()
+        public async Task<IQueryable<LibAyycorn.Dtos.Giftbox>> GetSelectionBoxes()
         {
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
             try
             {
-                HttpResponseMessage response = await client.GetAsync("http://ayycornselectionboxservice.azurewebsites.net/getboxes");
+                HttpRequestMessage request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = new Uri(BaseUrl + "getboxes")
+                };
 
-                response.EnsureSuccessStatusCode();
+                IQueryable< LibAyycorn.Dtos.Giftbox > res = await ExecuteRequestAsync<IQueryable<LibAyycorn.Dtos.Giftbox>>(request);
 
-                string content = await response.Content.ReadAsStringAsync();
-
-                return JsonConvert.DeserializeObject<IQueryable<LibAyycorn.Dtos.SelectionBox>>(content, SerializerSettings);
+                return res.Any() 
+                    ? res
+                    : Enumerable.Empty<LibAyycorn.Dtos.Giftbox>().AsQueryable();
             }
             catch (Exception ex)
             {
-                return Enumerable.Empty<LibAyycorn.Dtos.SelectionBox>().AsQueryable();
+                return Enumerable.Empty<LibAyycorn.Dtos.Giftbox>().AsQueryable();
             }
         }
 
-        public async Task<bool> PostSelectionBox(LibAyycorn.Dtos.SelectionBox selectionBox)
+        public async Task<LibAyycorn.Dtos.Giftbox> PostSelectionBox(LibAyycorn.Dtos.Giftbox selectionBox)
         {
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
             try
             {
-                string json = JsonConvert.SerializeObject(selectionBox);
-                HttpResponseMessage response = await client.PostAsJsonAsync("http://ayycornselectionboxservice.azurewebsites.net/postbox", json);
+                HttpRequestMessage request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Put,
+                    RequestUri = new Uri(BaseUrl + "postbox"),
+                    Content = new StringContent(JsonConvert.SerializeObject(selectionBox), Encoding.UTF8, "application/json")
+                };
 
-                response.EnsureSuccessStatusCode();
-
-                return true;
+                return await ExecuteRequestAsync<LibAyycorn.Dtos.Giftbox>(request);
             }
             catch (Exception ex)
             {
-                return false;
+                return null;
             }
         }
 
-        public async Task<bool> UpdateSelectionBox(LibAyycorn.Dtos.SelectionBox selectionBox)
+        public async Task<LibAyycorn.Dtos.Giftbox> UpdateSelectionBox(LibAyycorn.Dtos.Giftbox selectionBox)
         {
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
             try
             {
-                string json = JsonConvert.SerializeObject(selectionBox);
-                HttpResponseMessage response = await client.PutAsJsonAsync("http://ayycornselectionboxservice.azurewebsites.net/updatebox/" + selectionBox.Id, json);
+                HttpRequestMessage request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Put,
+                    RequestUri = new Uri(BaseUrl + "updatebox/" + selectionBox.Id),
+                    Content = new StringContent(JsonConvert.SerializeObject(selectionBox), Encoding.UTF8, "application/json")
+                };
 
-                response.EnsureSuccessStatusCode();
-
-                return true;
+                return await ExecuteRequestAsync<LibAyycorn.Dtos.Giftbox>(request);
             }
             catch (Exception ex)
             {
-                return false;
+                return null;
             }
         }
 
-        public async Task<bool> RemoveSelectionBox(LibAyycorn.Dtos.SelectionBox selectionBox)
+        public async Task<bool> RemoveSelectionBox(LibAyycorn.Dtos.Giftbox selectionBox)
         {
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
             try
             {
                 HttpRequestMessage request = new HttpRequestMessage
                 {
                     Method = HttpMethod.Delete,
-                    RequestUri = new Uri("http://ayycornselectionboxservice.azurewebsites.net/deletebox/" + selectionBox.Id)
+                    RequestUri = new Uri(BaseUrl + "deletebox/" + selectionBox.Id)
                 };
 
                 HttpResponseMessage response = await client.SendAsync(request);
@@ -109,6 +109,14 @@ namespace WebApi.Facades
             {
                 return false;
             }
+        }
+
+        private async Task<T> ExecuteRequestAsync<T>(HttpRequestMessage request) where T : class
+        {
+            HttpResponseMessage response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+            string content = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<T>(content, SerializerSettings);
         }
     }
 }

@@ -12,7 +12,34 @@ namespace WebApi.Controllers
     {
         [HttpGet]
         [Route("api/test")]
-        public async Task<IEnumerable<LibAyycorn.Dtos.SelectionBox>> Get()
+        public async Task<IEnumerable<LibAyycorn.Dtos.Giftbox>> Get()
+        {
+            Facades.SelectionBoxServiceFacade sbsf = new Facades.SelectionBoxServiceFacade();
+
+            return await sbsf.GetSelectionBoxes();
+        }
+
+        [HttpPost]
+        [Route("api/test1")]
+        public async Task<IEnumerable<LibAyycorn.Dtos.Giftbox>> Post()
+        {
+            Facades.SelectionBoxServiceFacade sbsf = new Facades.SelectionBoxServiceFacade();
+
+            return await sbsf.GetSelectionBoxes();
+        }
+
+        [HttpPut]
+        [Route("api/test2")]
+        public async Task<IEnumerable<LibAyycorn.Dtos.Giftbox>> Put()
+        {
+            Facades.SelectionBoxServiceFacade sbsf = new Facades.SelectionBoxServiceFacade();
+
+            return await sbsf.GetSelectionBoxes();
+        }
+
+        [HttpDelete]
+        [Route("api/test3")]
+        public async Task<IEnumerable<LibAyycorn.Dtos.Giftbox>> Delete()
         {
             Facades.SelectionBoxServiceFacade sbsf = new Facades.SelectionBoxServiceFacade();
 

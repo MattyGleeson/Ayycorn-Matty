@@ -17,7 +17,7 @@ namespace SelectionBoxService.Tests.Tests
         [TestMethod]
         public async Task TestPutChangeAvailable()
         {
-            HttpResponseMessage response = await Controller.UpdateSelectionBox(1, new LibAyycorn.Dtos.SelectionBox
+            HttpResponseMessage response = await Controller.UpdateSelectionBox(1, new LibAyycorn.Dtos.Giftbox
             {
                 Id = 1,
                 Total = 10.0,
@@ -37,7 +37,7 @@ namespace SelectionBoxService.Tests.Tests
         [TestMethod]
         public async Task TestPutChangeVisible()
         {
-            HttpResponseMessage response = await Controller.UpdateSelectionBox(2, new LibAyycorn.Dtos.SelectionBox
+            HttpResponseMessage response = await Controller.UpdateSelectionBox(2, new LibAyycorn.Dtos.Giftbox
             {
                 Id = 2,
                 Total = 10.0,
@@ -57,7 +57,7 @@ namespace SelectionBoxService.Tests.Tests
         [TestMethod]
         public async Task TestPutChangeAvailableAndVisible()
         {
-            HttpResponseMessage response = await Controller.UpdateSelectionBox(2, new LibAyycorn.Dtos.SelectionBox
+            HttpResponseMessage response = await Controller.UpdateSelectionBox(2, new LibAyycorn.Dtos.Giftbox
             {
                 Id = 3,
                 Total = 10.0,
@@ -77,7 +77,7 @@ namespace SelectionBoxService.Tests.Tests
         [TestMethod]
         public async Task TestPutNoChanges()
         {
-            HttpResponseMessage response = await Controller.UpdateSelectionBox(2, new LibAyycorn.Dtos.SelectionBox
+            HttpResponseMessage response = await Controller.UpdateSelectionBox(2, new LibAyycorn.Dtos.Giftbox
             {
                 Id = 4,
                 Total = 10.0,

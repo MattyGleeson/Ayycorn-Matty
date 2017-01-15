@@ -19,7 +19,7 @@ namespace SelectionBoxService.Tests.Tests
         [TestMethod]
         public async Task TestPostNoProducts()
         {
-            HttpResponseMessage response = await Controller.PostSelectionBox(new LibAyycorn.Dtos.SelectionBox
+            HttpResponseMessage response = await Controller.PostSelectionBox(new LibAyycorn.Dtos.Giftbox
             {
                 Id = 7,
                 Total = 10.0,
@@ -42,7 +42,7 @@ namespace SelectionBoxService.Tests.Tests
         [TestMethod]
         public async Task TestPostSingleProduct()
         {
-            HttpResponseMessage response = await Controller.PostSelectionBox(new LibAyycorn.Dtos.SelectionBox
+            HttpResponseMessage response = await Controller.PostSelectionBox(new LibAyycorn.Dtos.Giftbox
             {
                 Id = 7,
                 Total = 10.0,
@@ -76,7 +76,7 @@ namespace SelectionBoxService.Tests.Tests
         [TestMethod]
         public async Task TestPostMultipleProducts()
         {
-            HttpResponseMessage response = await Controller.PostSelectionBox(new LibAyycorn.Dtos.SelectionBox
+            HttpResponseMessage response = await Controller.PostSelectionBox(new LibAyycorn.Dtos.Giftbox
             {
                 Id = 8,
                 Total = 10.0,
@@ -116,7 +116,7 @@ namespace SelectionBoxService.Tests.Tests
         [TestMethod]
         public async Task TestPostExistingProduct()
         {
-            HttpResponseMessage response = await Controller.PostSelectionBox(new LibAyycorn.Dtos.SelectionBox
+            HttpResponseMessage response = await Controller.PostSelectionBox(new LibAyycorn.Dtos.Giftbox
             {
                 Id = 9,
                 Total = 10.0,
@@ -153,7 +153,7 @@ namespace SelectionBoxService.Tests.Tests
             HttpResponseMessage response = await Controller.PostSelectionBox(null);
 
             Assert.IsTrue(!response.IsSuccessStatusCode);
-            Assert.AreEqual(response.StatusCode, HttpStatusCode.BadRequest);
+            Assert.AreEqual(response.StatusCode, HttpStatusCode.InternalServerError);
         }
     }
 }

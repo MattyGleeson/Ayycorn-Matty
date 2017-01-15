@@ -1,0 +1,153 @@
+﻿[
+  {
+    "Total": 20,
+    "WrappingId": 1,
+    "WrappingTypeId": 1,
+    "WrappingTypeName": "Test Wrap",
+    "WrappingRangeId": 1,
+    "WrappingRangeName": "test Range",
+    "Removed": false,
+    "Visible": true,
+    "Available": true,
+    "Products": [],
+    "Id": 1
+  },
+  {
+    "Total": 20,
+    "WrappingId": 1,
+    "WrappingTypeId": 1,
+    "WrappingTypeName": "Test Wrap",
+    "WrappingRangeId": 1,
+    "WrappingRangeName": "test Range",
+    "Removed": false,
+    "Visible": true,
+    "Available": true,
+    "Products": [],
+    "Id": 2
+  },
+  {
+    "Total": 20,
+    "WrappingId": 1,
+    "WrappingTypeId": 1,
+    "WrappingTypeName": "Test Wrap",
+    "WrappingRangeId": 1,
+    "WrappingRangeName": "test Range",
+    "Removed": false,
+    "Visible": true,
+    "Available": true,
+    "Products": [],
+    "Id": 3
+  },
+  {
+    "Total": 20,
+    "WrappingId": 1,
+    "WrappingTypeId": 1,
+    "WrappingTypeName": "Test Wrap",
+    "WrappingRangeId": 1,
+    "WrappingRangeName": "test Range",
+    "Removed": false,
+    "Visible": true,
+    "Available": true,
+    "Products": [
+      {
+        "Ean": null,
+        "CategoryId": 0,
+        "CategoryName": null,
+        "BrandId": 0,
+        "BrandName": null,
+        "Name": "Prod 1",
+        "Description": null,
+        "Price": 0,
+        "InStock": false,
+        "ExpectedRestock": "0001-01-01T00:00:00",
+        "StoreName": "Test Store",
+        "Id": 1
+      }
+    ],
+    "Id": 4
+  },
+  {
+    "Total": 20,
+    "WrappingId": 1,
+    "WrappingTypeId": 1,
+    "WrappingTypeName": "Test Wrap",
+    "WrappingRangeId": 1,
+    "WrappingRangeName": "test Range",
+    "Removed": false,
+    "Visible": true,
+    "Available": true,
+    "Products": [
+      {
+        "Ean": null,
+        "CategoryId": 0,
+        "CategoryName": null,
+        "BrandId": 0,
+        "BrandName": null,
+        "Name": "Prod 1",
+        "Description": null,
+        "Price": 0,
+        "InStock": false,
+        "ExpectedRestock": "0001-01-01T00:00:00",
+        "StoreName": "Test Store",
+        "Id": 1
+      },
+      {
+        "Ean": null,
+        "CategoryId": 0,
+        "CategoryName": null,
+        "BrandId": 0,
+        "BrandName": null,
+        "Name": "Prod 2",
+        "Description": null,
+        "Price": 0,
+        "InStock": false,
+        "ExpectedRestock": "0001-01-01T00:00:00",
+        "StoreName": "Test Store",
+        "Id": 2
+      }
+    ],
+    "Id": 5
+  },
+  {
+    "Total": 40,
+    "WrappingId": 1,
+    "WrappingTypeId": 1,
+    "WrappingTypeName": "Test Wrap",
+    "WrappingRangeId": 1,
+    "WrappingRangeName": "test Range",
+    "Removed": false,
+    "Visible": true,
+    "Available": true,
+    "Products": [
+      {
+        "Ean": null,
+        "CategoryId": 0,
+        "CategoryName": null,
+        "BrandId": 0,
+        "BrandName": null,
+        "Name": "Prod 1",
+        "Description": null,
+        "Price": 0,
+        "InStock": false,
+        "ExpectedRestock": "0001-01-01T00:00:00",
+        "StoreName": "Test Store",
+        "Id": 1
+      },
+      {
+        "Ean": null,
+        "CategoryId": 0,
+        "CategoryName": null,
+        "BrandId": 0,
+        "BrandName": null,
+        "Name": "Prod 2",
+        "Description": null,
+        "Price": 0,
+        "InStock": false,
+        "ExpectedRestock": "0001-01-01T00:00:00",
+        "StoreName": "Test Store",
+        "Id": 2
+      }
+    ],
+    "Id": 6
+  }
+]

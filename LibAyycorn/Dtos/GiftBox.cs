@@ -9,7 +9,7 @@ namespace LibAyycorn.Dtos
     /// Class Selection Box.
     /// </summary>
     /// <seealso cref="LibAyycorn.Dto" />
-    public class SelectionBox : Dto
+    public class Giftbox : Dto
     {
         public virtual double Total { get; set; }
         public virtual int WrappingId { get; set; }

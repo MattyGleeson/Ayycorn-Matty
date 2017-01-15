@@ -1,7 +1,6 @@
 ﻿using LibAyycorn.Dtos;
 using Newtonsoft.Json;
 using SelectionBoxService.Data;
-using SelectionBoxService.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -35,11 +34,9 @@ namespace SelectionBoxService.Controllers
         [HttpGet]
         public async Task<HttpResponseMessage> GetAllSelectionBoxes()
         {
-            HttpResponseMessage response = new HttpResponseMessage();
+            IEnumerable<SelectionBox> res = await db.SelectionBoxes.ToListAsync();
 
-            IEnumerable<Data.SelectionBox> res = await db.SelectionBoxes.ToListAsync();
-
-            IEnumerable<LibAyycorn.Dtos.SelectionBox> boxes = res.Select(b => CreateBoxFromDbBox(b));
+            IEnumerable<Giftbox> boxes = res.Select(b => CreateBoxFromDbBox(b));
 
             return boxes.Any() ?
                 Request.CreateResponse(HttpStatusCode.OK, boxes) :
@@ -53,11 +50,11 @@ namespace SelectionBoxService.Controllers
         /// <returns></returns>
         [Route("postbox")]
         [HttpPost]
-        public async Task<HttpResponseMessage> PostSelectionBox(LibAyycorn.Dtos.SelectionBox gb)
+        public async Task<HttpResponseMessage> PostSelectionBox(Giftbox gb)
         {
             try
             {
-                Data.SelectionBox newBox = db.SelectionBoxes.Add(new Data.SelectionBox
+                SelectionBox newBox = db.SelectionBoxes.Add(new SelectionBox
                 {
                     Total = gb.Total,
                     WrappingId = gb.WrappingId,
@@ -104,13 +101,13 @@ namespace SelectionBoxService.Controllers
                     }
                 }
 
-                LibAyycorn.Dtos.SelectionBox res = CreateBoxFromDbBox(newBox);
+                Giftbox res = CreateBoxFromDbBox(newBox);
 
                 return Request.CreateResponse(HttpStatusCode.OK, res);
             }
             catch (Exception ex)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Failed");
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Failed");
             }
         }
 
@@ -125,7 +122,7 @@ namespace SelectionBoxService.Controllers
         {
             try
             {
-                Data.SelectionBox selectionBox = await db.SelectionBoxes.Where(sb => sb.Id == id).FirstOrDefaultAsync();
+                SelectionBox selectionBox = await db.SelectionBoxes.Where(sb => sb.Id == id).FirstOrDefaultAsync();
                 selectionBox.Removed = true;
 
                 db.SetModified(selectionBox);
@@ -136,7 +133,7 @@ namespace SelectionBoxService.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Failed");
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Failed");
             }
         }
 
@@ -148,7 +145,7 @@ namespace SelectionBoxService.Controllers
         /// <returns></returns>
         [Route("updatebox/{id:int?}")]
         [HttpPut]
-        public async Task<HttpResponseMessage> UpdateSelectionBox(int Id, LibAyycorn.Dtos.SelectionBox postObject)
+        public async Task<HttpResponseMessage> UpdateSelectionBox(int Id, Giftbox postObject)
         {
             try
             {
@@ -165,13 +162,13 @@ namespace SelectionBoxService.Controllers
                 db.SetModified(selectionBox);
                 await db.SaveChangesAsync();
 
-                LibAyycorn.Dtos.SelectionBox res = CreateBoxFromDbBox(selectionBox);
+                Giftbox res = CreateBoxFromDbBox(selectionBox);
 
                 return Request.CreateResponse(HttpStatusCode.OK, res);
             }
             catch (Exception ex)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Failed");
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Failed");
             }
         }
 
@@ -185,7 +182,7 @@ namespace SelectionBoxService.Controllers
             return !(await db.SelectionBoxProducts.AnyAsync(sb => (sb.ProductId == prod) && (sb.SelectionBoxId == selectionBox)));
         }
 
-        private IEnumerable<LibAyycorn.Dtos.Product> GetProductsForBox(Data.SelectionBox box)
+        private IEnumerable<LibAyycorn.Dtos.Product> GetProductsForBox(SelectionBox box)
         {
             IEnumerable<Data.Product> boxProducts = box.SelectionBoxProducts.Select(b => b.Product);
             if (boxProducts.Any())
@@ -198,9 +195,9 @@ namespace SelectionBoxService.Controllers
             return Enumerable.Empty<LibAyycorn.Dtos.Product>();
         }
 
-        private LibAyycorn.Dtos.SelectionBox CreateBoxFromDbBox(Data.SelectionBox box)
+        private Giftbox CreateBoxFromDbBox(SelectionBox box)
         {
-            return new LibAyycorn.Dtos.SelectionBox
+            return new LibAyycorn.Dtos.Giftbox
             {
                 Id = box.Id,
                 Total = box.Total,

@@ -44,7 +44,7 @@
     <Compile Include="Dto.cs" />
     <Compile Include="Dtos\Brand.cs" />
     <Compile Include="Dtos\Category.cs" />
-    <Compile Include="Dtos\SelectionBox.cs" />
+    <Compile Include="Dtos\Giftbox.cs" />
     <Compile Include="Dtos\Order.cs" />
     <Compile Include="Dtos\Product.cs" />
     <Compile Include="Dtos\User.cs" />
