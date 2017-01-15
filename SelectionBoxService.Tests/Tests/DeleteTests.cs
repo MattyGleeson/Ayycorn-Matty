@@ -15,7 +15,7 @@ namespace SelectionBoxService.Tests.Tests
     public class DeleteTests : GenericTest
     {
         [TestMethod]
-        public async Task TestRemove()
+        public async Task ServiceTestRemove()
         {
             HttpResponseMessage response = await Controller.DeleteSelectionBox(2);
 

@@ -118,9 +118,7 @@ namespace SelectionBoxService.Controllers
                     }
                 }
 
-                Giftbox res = CreateBoxFromDbBox(newBox);
-
-                return Request.CreateResponse(HttpStatusCode.OK, res);
+                return Request.CreateResponse(HttpStatusCode.OK, CreateBoxFromDbBox(newBox));
             }
             catch (Exception ex)
             {
@@ -167,13 +165,15 @@ namespace SelectionBoxService.Controllers
             {
                 Data.SelectionBox selectionBox = await db.SelectionBoxes.Where(sb => sb.Id == Id).FirstOrDefaultAsync();
 
-                selectionBox.Available = selectionBox.Available != postObject.Available
-                    ? postObject.Available
-                    : selectionBox.Available;
-
-                selectionBox.Visible = selectionBox.Visible != postObject.Visible
-                    ? postObject.Visible
-                    : selectionBox.Visible;
+                selectionBox.Available = postObject.Available;
+                selectionBox.Removed = postObject.Removed;
+                selectionBox.Total = postObject.Total;
+                selectionBox.Visible = postObject.Visible;
+                selectionBox.WrappingId = postObject.WrappingId;
+                selectionBox.WrappingRangeId = postObject.WrappingRangeId;
+                selectionBox.WrappingRangeName = postObject.WrappingRangeName;
+                selectionBox.WrappingTypeId = postObject.WrappingTypeId;
+                selectionBox.WrappingTypeName = postObject.WrappingTypeName;
 
                 db.SetModified(selectionBox);
                 await db.SaveChangesAsync();
@@ -213,7 +213,7 @@ namespace SelectionBoxService.Controllers
 
         private Giftbox CreateBoxFromDbBox(SelectionBox box)
         {
-            return new LibAyycorn.Dtos.Giftbox
+            return new Giftbox
             {
                 Id = box.Id,
                 Total = box.Total,

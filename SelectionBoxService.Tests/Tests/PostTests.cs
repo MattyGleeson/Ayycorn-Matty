@@ -17,7 +17,7 @@ namespace SelectionBoxService.Tests.Tests
     public class PostTests : GenericTest
     {
         [TestMethod]
-        public async Task TestPostNoProducts()
+        public async Task ServiceTestPostNoProducts()
         {
             HttpResponseMessage response = await Controller.PostSelectionBox(new LibAyycorn.Dtos.Giftbox
             {
@@ -40,7 +40,7 @@ namespace SelectionBoxService.Tests.Tests
         }
 
         [TestMethod]
-        public async Task TestPostSingleProduct()
+        public async Task ServiceTestPostSingleProduct()
         {
             HttpResponseMessage response = await Controller.PostSelectionBox(new LibAyycorn.Dtos.Giftbox
             {
@@ -74,7 +74,7 @@ namespace SelectionBoxService.Tests.Tests
         }
 
         [TestMethod]
-        public async Task TestPostMultipleProducts()
+        public async Task ServiceTestPostMultipleProducts()
         {
             HttpResponseMessage response = await Controller.PostSelectionBox(new LibAyycorn.Dtos.Giftbox
             {
@@ -114,7 +114,7 @@ namespace SelectionBoxService.Tests.Tests
         }
 
         [TestMethod]
-        public async Task TestPostExistingProduct()
+        public async Task ServiceTestPostExistingProduct()
         {
             HttpResponseMessage response = await Controller.PostSelectionBox(new LibAyycorn.Dtos.Giftbox
             {
@@ -148,7 +148,7 @@ namespace SelectionBoxService.Tests.Tests
         }
 
         [TestMethod]
-        public async Task TestPostNull()
+        public async Task ServiceTestPostNull()
         {
             HttpResponseMessage response = await Controller.PostSelectionBox(null);
 

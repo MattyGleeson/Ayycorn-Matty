@@ -28,7 +28,7 @@ namespace WebApi.Tests.Tests
         }
 
         [TestMethod]
-        public async Task TestGet()
+        public async Task FacadeTestGet()
         {
             var MockHttp = new MockHttpMessageHandler();
             MockHttp.When(BaseUrl + "getboxes").Respond("application/json", json);
@@ -40,7 +40,7 @@ namespace WebApi.Tests.Tests
         }
 
         [TestMethod]
-        public async Task TestGetFailureHandling()
+        public async Task FacadeTestGetFailureHandling()
         {
             var mockFailHttp = new MockHttpMessageHandler();
             mockFailHttp.When(BaseUrl + "getboxes").Respond(HttpStatusCode.InternalServerError);
@@ -52,7 +52,7 @@ namespace WebApi.Tests.Tests
         }
 
         [TestMethod]
-        public async Task TestPost()
+        public async Task FacadeTestPost()
         {
             var MockHttp = new MockHttpMessageHandler();
             string json = JsonConvert.SerializeObject(Boxes.ElementAt(1));
@@ -66,7 +66,7 @@ namespace WebApi.Tests.Tests
         }
 
         [TestMethod]
-        public async Task TestPostFailureHandling()
+        public async Task FacadeTestPostFailureHandling()
         {
             var mockFailHttp = new MockHttpMessageHandler();
             mockFailHttp.When(BaseUrl + "postbox").Respond(HttpStatusCode.InternalServerError);
@@ -78,7 +78,7 @@ namespace WebApi.Tests.Tests
         }
 
         [TestMethod]
-        public async Task TestPut()
+        public async Task FacadeTestPut()
         {
             Boxes.ElementAt(1).Available = false;
             string json = JsonConvert.SerializeObject(Boxes.ElementAt(1));
@@ -93,7 +93,7 @@ namespace WebApi.Tests.Tests
         }
 
         [TestMethod]
-        public async Task TestPutFailureHandling()
+        public async Task FacadeTestPutFailureHandling()
         {
             Boxes.ElementAt(2).Available = false;
             string json = JsonConvert.SerializeObject(Boxes.ElementAt(2));
@@ -108,7 +108,7 @@ namespace WebApi.Tests.Tests
         }
 
         [TestMethod]
-        public async Task TestDelete()
+        public async Task FacadeTestDelete()
         {
             var MockHttp = new MockHttpMessageHandler();
             MockHttp.When(BaseUrl + "deletebox/*").Respond(HttpStatusCode.OK);
@@ -120,7 +120,7 @@ namespace WebApi.Tests.Tests
         }
 
         [TestMethod]
-        public async Task TestDeleteFailurehandling()
+        public async Task FacadeTestDeleteFailurehandling()
         {
             var MockHttp = new MockHttpMessageHandler();
             MockHttp.When(BaseUrl + "deletebox/" + Boxes.ElementAt(1).Id).Respond(HttpStatusCode.InternalServerError);

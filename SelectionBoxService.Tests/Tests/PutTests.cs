@@ -15,7 +15,7 @@ namespace SelectionBoxService.Tests.Tests
     public class PutTests : GenericTest
     {
         [TestMethod]
-        public async Task TestPutChangeAvailable()
+        public async Task ServiceTestPutChangeAvailable()
         {
             HttpResponseMessage response = await Controller.UpdateSelectionBox(1, new LibAyycorn.Dtos.Giftbox
             {
@@ -35,7 +35,7 @@ namespace SelectionBoxService.Tests.Tests
         }
 
         [TestMethod]
-        public async Task TestPutChangeVisible()
+        public async Task ServiceTestPutChangeVisible()
         {
             HttpResponseMessage response = await Controller.UpdateSelectionBox(2, new LibAyycorn.Dtos.Giftbox
             {
@@ -55,7 +55,7 @@ namespace SelectionBoxService.Tests.Tests
         }
 
         [TestMethod]
-        public async Task TestPutChangeAvailableAndVisible()
+        public async Task ServiceTestPutChangeAvailableAndVisible()
         {
             HttpResponseMessage response = await Controller.UpdateSelectionBox(2, new LibAyycorn.Dtos.Giftbox
             {
@@ -75,7 +75,7 @@ namespace SelectionBoxService.Tests.Tests
         }
 
         [TestMethod]
-        public async Task TestPutNoChanges()
+        public async Task ServiceTestPutNoChanges()
         {
             HttpResponseMessage response = await Controller.UpdateSelectionBox(2, new LibAyycorn.Dtos.Giftbox
             {

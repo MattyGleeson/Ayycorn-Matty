@@ -19,7 +19,7 @@ namespace SelectionBoxService.Tests.Tests
     public class GetTests : GenericTest
     {
         [TestMethod]
-        public async Task TestGet()
+        public async Task ServiceTestGet()
         {
             HttpResponseMessage response = await Controller.GetAllSelectionBoxes();
 
@@ -32,7 +32,7 @@ namespace SelectionBoxService.Tests.Tests
         }
 
         [TestMethod]
-        public async Task TestGetNoData()
+        public async Task ServiceTestGetNoData()
         {
             SampleData Data = new SampleData(false);
 
