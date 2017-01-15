@@ -40,7 +40,7 @@ namespace WebApi.Facades
                     RequestUri = new Uri(BaseUrl + "getboxes")
                 };
 
-                IQueryable< LibAyycorn.Dtos.Giftbox > res = await ExecuteRequestAsync<IQueryable<LibAyycorn.Dtos.Giftbox>>(request);
+                IQueryable< LibAyycorn.Dtos.Giftbox > res = await ExecuteRequestAsyncList<LibAyycorn.Dtos.Giftbox>(request);
 
                 return res.Any() 
                     ? res
@@ -49,6 +49,24 @@ namespace WebApi.Facades
             catch (Exception ex)
             {
                 return Enumerable.Empty<LibAyycorn.Dtos.Giftbox>().AsQueryable();
+            }
+        }
+
+        public async Task<LibAyycorn.Dtos.Giftbox> GetSelectionBoxById(int id)
+        {
+            try
+            {
+                HttpRequestMessage request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = new Uri(BaseUrl + "getbox/" + id)
+                };
+
+                return await ExecuteRequestAsync<LibAyycorn.Dtos.Giftbox>(request);
+            }
+            catch(Exception ex)
+            {
+                return null;
             }
         }
 
@@ -90,14 +108,14 @@ namespace WebApi.Facades
             }
         }
 
-        public async Task<bool> RemoveSelectionBox(LibAyycorn.Dtos.Giftbox selectionBox)
+        public async Task<bool> RemoveSelectionBox(int id)
         {
             try
             {
                 HttpRequestMessage request = new HttpRequestMessage
                 {
                     Method = HttpMethod.Delete,
-                    RequestUri = new Uri(BaseUrl + "deletebox/" + selectionBox.Id)
+                    RequestUri = new Uri(BaseUrl + "deletebox/" + id)
                 };
 
                 HttpResponseMessage response = await client.SendAsync(request);
@@ -117,6 +135,14 @@ namespace WebApi.Facades
             response.EnsureSuccessStatusCode();
             string content = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<T>(content, SerializerSettings);
+        }
+
+        private async Task<IQueryable<T>> ExecuteRequestAsyncList<T>(HttpRequestMessage request) where T : class
+        {
+            HttpResponseMessage response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+            string content = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<List<T>>(content, SerializerSettings).AsQueryable();
         }
     }
 }

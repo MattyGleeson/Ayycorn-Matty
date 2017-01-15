@@ -34,13 +34,30 @@ namespace SelectionBoxService.Controllers
         [HttpGet]
         public async Task<HttpResponseMessage> GetAllSelectionBoxes()
         {
-            IEnumerable<SelectionBox> res = await db.SelectionBoxes.ToListAsync();
+            IEnumerable<SelectionBox> res = await db.SelectionBoxes.Where(b => b.Removed != true).ToListAsync();
 
             IEnumerable<Giftbox> boxes = res.Select(b => CreateBoxFromDbBox(b));
 
             return boxes.Any() ?
                 Request.CreateResponse(HttpStatusCode.OK, boxes) :
                 Request.CreateErrorResponse(HttpStatusCode.NoContent, "No Selection Boxes");
+        }
+
+        /// <summary>
+        /// Gets a selection box by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("getbox/{id:int?}")]
+        [HttpGet]
+        public async Task<HttpResponseMessage> GetSelectionBox(int id)
+        {
+            SelectionBox res = await db.SelectionBoxes.Where(b => b.Removed != true && b.Id == id).FirstOrDefaultAsync();
+
+            if (res != null)
+                return Request.CreateResponse(HttpStatusCode.OK, CreateBoxFromDbBox(res));
+            else
+                return Request.CreateErrorResponse(HttpStatusCode.NoContent, "No Selection Box with Id");
         }
 
         /// <summary>
@@ -132,7 +149,6 @@ namespace SelectionBoxService.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Failed");
             }
         }
