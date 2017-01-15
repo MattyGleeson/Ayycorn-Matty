@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace WebApi.Tests.Tests
 {
     [TestClass]
-    public class UnitTest1
+    public class UnitTests
     {
         private readonly JsonSerializerSettings SerializerSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore };
         private List<Giftbox> Boxes;
