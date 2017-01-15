@@ -5,9 +5,12 @@ using System.Threading.Tasks;
 
 namespace LibAyycorn.Dtos
 {
-    public class User
+    /// <summary>
+    /// Class User.
+    /// </summary>
+    /// <seealso cref="LibAyycorn.Dto" />
+    public class User : Dto
     {
-        public virtual int Id { get; set; }
         public virtual string Username { get; set; }
         public virtual string Password { get; set; }
         public virtual string FirstName { get; set; }

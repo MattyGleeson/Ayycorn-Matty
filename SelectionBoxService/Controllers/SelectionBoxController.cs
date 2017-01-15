@@ -28,7 +28,7 @@ namespace SelectionBoxService.Controllers
         }
 
         /// <summary>
-        /// Gets all selection boxes from the database
+        /// Gets all selection boxes from the database.
         /// </summary>
         /// <returns></returns>
         [Route("getboxes")]
@@ -39,41 +39,15 @@ namespace SelectionBoxService.Controllers
 
             IEnumerable<Data.SelectionBox> res = await db.SelectionBoxes.ToListAsync();
 
-            IEnumerable<LibAyycorn.Dtos.SelectionBox> boxes = res.Select(b => new LibAyycorn.Dtos.SelectionBox
-            {
-                Id = b.Id,
-                Total = b.Total,
-                WrappingId = b.WrappingId,
-                WrappingRangeId = b.WrappingRangeId,
-                WrappingRangeName = b.WrappingRangeName,
-                WrappingTypeId = b.WrappingTypeId,
-                WrappingTypeName = b.WrappingTypeName,
-                Removed = b.Removed == false ? false : true,
-                Visible = b.Visible == false ? false : true,
-                Available = b.Available == false ? false : true,
-                Products = GetProductsForBox(b)
-            });
+            IEnumerable<LibAyycorn.Dtos.SelectionBox> boxes = res.Select(b => CreateBoxFromDbBox(b));
 
             return boxes.Any() ?
                 Request.CreateResponse(HttpStatusCode.OK, boxes) :
                 Request.CreateErrorResponse(HttpStatusCode.NoContent, "No Selection Boxes");
         }
 
-        private IEnumerable<LibAyycorn.Dtos.Product> GetProductsForBox(Data.SelectionBox box)
-        {
-            IEnumerable<Data.Product> boxProducts = box.SelectionBoxProducts.Select(b => b.Product);
-            if (boxProducts.Any())
-                return boxProducts.Select(b => new LibAyycorn.Dtos.Product
-                {
-                    Id = b.ProductId,
-                    Name = b.Name,
-                    Store = b.Store
-                });
-            return Enumerable.Empty<LibAyycorn.Dtos.Product>();
-        }
-
         /// <summary>
-        /// Posts a selection box Dto to the database
+        /// Posts a selection box Dto to the database.
         /// </summary>
         /// <param name="gb"></param>
         /// <returns></returns>
@@ -83,7 +57,7 @@ namespace SelectionBoxService.Controllers
         {
             try
             {
-                Data.SelectionBox newSelectionBox = db.SelectionBoxes.Add(new Data.SelectionBox
+                Data.SelectionBox newBox = db.SelectionBoxes.Add(new Data.SelectionBox
                 {
                     Total = gb.Total,
                     WrappingId = gb.WrappingId,
@@ -102,34 +76,37 @@ namespace SelectionBoxService.Controllers
                 {
                     foreach (LibAyycorn.Dtos.Product product in gb.Products)
                     {
-                        Data.Product dbProd = await GetProduct(product.Name, product.Store);
+                        Data.Product dbProd = await GetProduct(product.Name, product.StoreName);
 
                         if (dbProd == null)
                         {
                             dbProd = db.Products.Add(new Data.Product
                             {
                                 Name = product.Name,
-                                Store = product.Store,
+                                Store = product.StoreName,
                                 ProductId = product.Id
                             });
                             await db.SaveChangesAsync();
                         }
 
-                        if (await CheckIfSelectionBoxProductIsValid(dbProd.Id, newSelectionBox.Id))
+
+                        if (await CheckIfSelectionBoxProductIsValid(dbProd.Id, newBox.Id))
                         {
                             db.SelectionBoxProducts.Add(new SelectionBoxProduct
                             {
                                 ProductId = dbProd.Id,
                                 Product = dbProd,
-                                SelectionBoxId = newSelectionBox.Id,
-                                SelectionBox = newSelectionBox
+                                SelectionBoxId = newBox.Id,
+                                SelectionBox = newBox
                             });
                             await db.SaveChangesAsync();
                         }
                     }
                 }
-                
-                return Request.CreateResponse(HttpStatusCode.OK, "Success");
+
+                LibAyycorn.Dtos.SelectionBox res = CreateBoxFromDbBox(newBox);
+
+                return Request.CreateResponse(HttpStatusCode.OK, res);
             }
             catch (Exception ex)
             {
@@ -138,7 +115,7 @@ namespace SelectionBoxService.Controllers
         }
 
         /// <summary>
-        /// Removes a selection box
+        /// Removes a selection box.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -177,18 +154,20 @@ namespace SelectionBoxService.Controllers
             {
                 Data.SelectionBox selectionBox = await db.SelectionBoxes.Where(sb => sb.Id == Id).FirstOrDefaultAsync();
 
-                selectionBox.Available = selectionBox.Available != postObject.Available 
-                    ? postObject.Available 
+                selectionBox.Available = selectionBox.Available != postObject.Available
+                    ? postObject.Available
                     : selectionBox.Available;
 
-                selectionBox.Visible = selectionBox.Visible != postObject.Visible 
-                    ? postObject.Visible 
+                selectionBox.Visible = selectionBox.Visible != postObject.Visible
+                    ? postObject.Visible
                     : selectionBox.Visible;
 
                 db.SetModified(selectionBox);
                 await db.SaveChangesAsync();
 
-                return Request.CreateResponse(HttpStatusCode.OK, "Success");
+                LibAyycorn.Dtos.SelectionBox res = CreateBoxFromDbBox(selectionBox);
+
+                return Request.CreateResponse(HttpStatusCode.OK, res);
             }
             catch (Exception ex)
             {
@@ -204,6 +183,37 @@ namespace SelectionBoxService.Controllers
         private async Task<bool> CheckIfSelectionBoxProductIsValid(int prod, int selectionBox)
         {
             return !(await db.SelectionBoxProducts.AnyAsync(sb => (sb.ProductId == prod) && (sb.SelectionBoxId == selectionBox)));
+        }
+
+        private IEnumerable<LibAyycorn.Dtos.Product> GetProductsForBox(Data.SelectionBox box)
+        {
+            IEnumerable<Data.Product> boxProducts = box.SelectionBoxProducts.Select(b => b.Product);
+            if (boxProducts.Any())
+                return boxProducts.Select(b => new LibAyycorn.Dtos.Product
+                {
+                    Id = b.ProductId,
+                    Name = b.Name,
+                    StoreName = b.Store
+                });
+            return Enumerable.Empty<LibAyycorn.Dtos.Product>();
+        }
+
+        private LibAyycorn.Dtos.SelectionBox CreateBoxFromDbBox(Data.SelectionBox box)
+        {
+            return new LibAyycorn.Dtos.SelectionBox
+            {
+                Id = box.Id,
+                Total = box.Total,
+                WrappingId = box.WrappingId,
+                WrappingRangeId = box.WrappingRangeId ?? default(int),
+                WrappingRangeName = box.WrappingRangeName,
+                WrappingTypeId = box.WrappingTypeId ?? default(int),
+                WrappingTypeName = box.WrappingTypeName,
+                Removed = box.Removed == false ? false : true,
+                Visible = box.Visible == false ? false : true,
+                Available = box.Available == false ? false : true,
+                Products = GetProductsForBox(box)
+            };
         }
     }
 }

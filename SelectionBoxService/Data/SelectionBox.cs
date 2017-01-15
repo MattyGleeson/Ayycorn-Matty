@@ -19,7 +19,7 @@ namespace SelectionBoxService.Data
 
         public double Total { get; set; }
 
-        public int WrappingTypeId { get; set; }
+        public int? WrappingTypeId { get; set; }
 
         public bool? Available { get; set; }
 
@@ -35,7 +35,7 @@ namespace SelectionBoxService.Data
         [StringLength(20)]
         public string WrappingRangeName { get; set; }
 
-        public int WrappingRangeId { get; set; }
+        public int? WrappingRangeId { get; set; }
 
         public int WrappingId { get; set; }
 

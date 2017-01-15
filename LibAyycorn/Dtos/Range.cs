@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace LibAyycorn.Dtos
 {
-    class WrappingRange
+    /// <summary>
+    /// Class Range.
+    /// </summary>
+    /// <seealso cref="LibAyycorn.Dto" />
+    class Range : Dto
     {
-        public virtual int Id { get; set; }
         public virtual string Name { get; set; }
         public virtual string Description { get; set; }
     }

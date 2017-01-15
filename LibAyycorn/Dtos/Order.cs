@@ -5,9 +5,12 @@ using System.Threading.Tasks;
 
 namespace LibAyycorn.Dtos
 {
-    public class Order
+    /// <summary>
+    /// Class Order.
+    /// </summary>
+    /// <seealso cref="LibAyycorn.Dto"/>
+    public class Order : Dto
     {
-        public virtual int Id { get; set; }
         public virtual string AccountName { get; set; }
         public virtual string CardNumber { get; set; }
         public virtual int ProductId { get; set; }

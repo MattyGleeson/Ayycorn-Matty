@@ -13,10 +13,12 @@ namespace WebApi.Facades
     public class SelectionBoxServiceFacade : ApiController
     {
         private readonly HttpClient client;
+        protected JsonSerializerSettings SerializerSettings;
 
         public SelectionBoxServiceFacade()
         {
             client = new HttpClient();
+            SerializerSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore };
         }
 
         public SelectionBoxServiceFacade(HttpClient client)
@@ -24,7 +26,11 @@ namespace WebApi.Facades
             this.client = client;
         }
 
-        public async Task<IEnumerable<LibAyycorn.Dtos.SelectionBox>> GetSelectionBoxes()
+        /// <summary>
+        /// Gets all selection boxes.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IQueryable<LibAyycorn.Dtos.SelectionBox>> GetSelectionBoxes()
         {
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -36,11 +42,11 @@ namespace WebApi.Facades
 
                 string content = await response.Content.ReadAsStringAsync();
 
-                return JsonConvert.DeserializeObject<IEnumerable<LibAyycorn.Dtos.SelectionBox>>(content);
+                return JsonConvert.DeserializeObject<IQueryable<LibAyycorn.Dtos.SelectionBox>>(content, SerializerSettings);
             }
             catch (Exception ex)
             {
-                return Enumerable.Empty<LibAyycorn.Dtos.SelectionBox>();
+                return Enumerable.Empty<LibAyycorn.Dtos.SelectionBox>().AsQueryable();
             }
         }
 

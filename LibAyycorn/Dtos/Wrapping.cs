@@ -5,9 +5,12 @@ using System.Threading.Tasks;
 
 namespace LibAyycorn.Dtos
 {
-    public class Wrapping
+    /// <summary>
+    /// Class Wrapping.
+    /// </summary>
+    /// <seealso cref="LibAyycorn.Dto" />
+    public class Wrapping : Dto
     {
-        public virtual int Id { get; set; }
         public virtual double Size { get; set; }
         public virtual double Price { get; set; }
         public virtual string StoreName { get; set; }

@@ -5,9 +5,12 @@ using System.Threading.Tasks;
 
 namespace LibAyycorn.Dtos
 {
-    public class SelectionBox
+    /// <summary>
+    /// Class Selection Box.
+    /// </summary>
+    /// <seealso cref="LibAyycorn.Dto" />
+    public class SelectionBox : Dto
     {
-        public virtual int Id { get; set; }
         public virtual double Total { get; set; }
         public virtual int WrappingId { get; set; }
         public virtual int WrappingTypeId { get; set; }
