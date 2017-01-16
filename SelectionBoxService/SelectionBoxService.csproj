@@ -188,7 +188,6 @@
     <Compile Include="Data\Product.cs" />
     <Compile Include="Data\SelectionBox.cs" />
     <Compile Include="Data\SelectionBoxProduct.cs" />
-    <Compile Include="Data\Test\TestDbContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

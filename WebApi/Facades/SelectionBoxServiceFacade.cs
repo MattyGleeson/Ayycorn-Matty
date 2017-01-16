@@ -11,12 +11,18 @@ using System.Web.Http;
 
 namespace WebApi.Facades
 {
+    /// <summary>
+    /// Facade that handls the interactions between the web api and the selection box service.
+    /// </summary>
     public class SelectionBoxServiceFacade : ApiController
     {
         private readonly HttpClient client;
         private readonly string BaseUrl = "http://ayycornselectionboxservice.azurewebsites.net/";
         protected JsonSerializerSettings SerializerSettings;
 
+        /// <summary>
+        /// Default constructor that sets up the HttpClient and JsonSerializerSettings.
+        /// </summary>
         public SelectionBoxServiceFacade()
         {
             client = new HttpClient();
@@ -24,12 +30,20 @@ namespace WebApi.Facades
             SerializerSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore };
         }
 
+        /// <summary>
+        /// Constructor used for testing that accepts a mock HttpCient.
+        /// </summary>
+        /// <param name="client"></param>
         public SelectionBoxServiceFacade(HttpClient client)
         {
             this.client = client;
             SerializerSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore };
         }
 
+        /// <summary>
+        /// Returns an IQueryable of giftboxes from the selection box service.
+        /// </summary>
+        /// <returns></returns>
         public async Task<IQueryable<LibAyycorn.Dtos.Giftbox>> GetSelectionBoxes()
         {
             try
@@ -52,6 +66,11 @@ namespace WebApi.Facades
             }
         }
 
+        /// <summary>
+        /// Returns a giftbox with the id parameter.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<LibAyycorn.Dtos.Giftbox> GetSelectionBoxById(int id)
         {
             try
@@ -70,6 +89,11 @@ namespace WebApi.Facades
             }
         }
 
+        /// <summary>
+        /// Posts a selection box the service and returns the updated model.
+        /// </summary>
+        /// <param name="selectionBox"></param>
+        /// <returns></returns>
         public async Task<LibAyycorn.Dtos.Giftbox> PostSelectionBox(LibAyycorn.Dtos.Giftbox selectionBox)
         {
             try
@@ -89,6 +113,11 @@ namespace WebApi.Facades
             }
         }
 
+        /// <summary>
+        /// Updates a selection box and returns the updated model.
+        /// </summary>
+        /// <param name="selectionBox"></param>
+        /// <returns></returns>
         public async Task<LibAyycorn.Dtos.Giftbox> UpdateSelectionBox(LibAyycorn.Dtos.Giftbox selectionBox)
         {
             try
@@ -108,6 +137,11 @@ namespace WebApi.Facades
             }
         }
 
+        /// <summary>
+        /// Removes the selection box with the id parameter.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<bool> RemoveSelectionBox(int id)
         {
             try
@@ -129,6 +163,12 @@ namespace WebApi.Facades
             }
         }
 
+        /// <summary>
+        /// Async task to execute a HttpRequestMessage and return a single model. Uses T type parameter so the facade can be expanded if needed.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="request"></param>
+        /// <returns></returns>
         private async Task<T> ExecuteRequestAsync<T>(HttpRequestMessage request) where T : class
         {
             HttpResponseMessage response = await client.SendAsync(request);
@@ -137,6 +177,12 @@ namespace WebApi.Facades
             return JsonConvert.DeserializeObject<T>(content, SerializerSettings);
         }
 
+        /// <summary>
+        /// Async task to execute a HttpRequestMessage and return a list of models. Uses T type parameter so the facade can be expanded if needed.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="request"></param>
+        /// <returns></returns>
         private async Task<IQueryable<T>> ExecuteRequestAsyncList<T>(HttpRequestMessage request) where T : class
         {
             HttpResponseMessage response = await client.SendAsync(request);

@@ -12,15 +12,25 @@ using System.Web.Http;
 
 namespace SelectionBoxService.Controllers
 {
+    /// <summary>
+    /// Selectionbox service controller containing the endpoints used to GET, POST, PUT and DELETE.
+    /// </summary>
     public class SelectionBoxController : ApiController
     {
         private AyycornDb db;
 
+        /// <summary>
+        /// Default constructor that sets the database to be an instance of AyycornDb
+        /// </summary>
         public SelectionBoxController()
         {
             db = new AyycornDb();
         }
 
+        /// <summary>
+        /// Constructor used when unit testing to pass a mock of the AyycornDb
+        /// </summary>
+        /// <param name="db"></param>
         public SelectionBoxController(AyycornDb db)
         {
             this.db = db;
@@ -188,16 +198,33 @@ namespace SelectionBoxService.Controllers
             }
         }
 
+        /// <summary>
+        /// Returns a database product model using the name and the store.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="store"></param>
+        /// <returns></returns>
         private async Task<Data.Product> GetProduct(string name, string store)
         {
             return await db.Products.Where(p => p.Name == name && p.Store == store).FirstOrDefaultAsync();
         }
 
+        /// <summary>
+        /// Checks to see if a row with the same properties already exists in the database.
+        /// </summary>
+        /// <param name="prod"></param>
+        /// <param name="selectionBox"></param>
+        /// <returns></returns>
         private async Task<bool> CheckIfSelectionBoxProductIsValid(int prod, int selectionBox)
         {
             return !(await db.SelectionBoxProducts.AnyAsync(sb => (sb.ProductId == prod) && (sb.SelectionBoxId == selectionBox)));
         }
 
+        /// <summary>
+        /// Returns a list of products from the selection box parameter.
+        /// </summary>
+        /// <param name="box"></param>
+        /// <returns></returns>
         private IEnumerable<LibAyycorn.Dtos.Product> GetProductsForBox(SelectionBox box)
         {
             IEnumerable<Data.Product> boxProducts = box.SelectionBoxProducts.Select(b => b.Product);
@@ -211,6 +238,11 @@ namespace SelectionBoxService.Controllers
             return Enumerable.Empty<LibAyycorn.Dtos.Product>();
         }
 
+        /// <summary>
+        /// Returns a giftbox model using the database selection box parameter.
+        /// </summary>
+        /// <param name="box"></param>
+        /// <returns></returns>
         private Giftbox CreateBoxFromDbBox(SelectionBox box)
         {
             return new Giftbox
