@@ -21,10 +21,10 @@ namespace SelectionBoxService.Tests.Tests
         [TestMethod]
         public async Task ServiceTestGet()
         {
-            HttpResponseMessage response = await Controller.GetAllSelectionBoxes();
+            HttpResponseMessage response = await controller.GetAllSelectionBoxes();
 
             IEnumerable<LibAyycorn.Dtos.Giftbox> selectionBoxes;
-            IEnumerable<SelectionBox> dbSelectionBoxes = MockDb.Object.SelectionBoxes.ToList();
+            IEnumerable<SelectionBox> dbSelectionBoxes = mockDb.Object.SelectionBoxes.ToList();
 
             Assert.IsTrue(response.TryGetContentValue(out selectionBoxes));
             Assert.AreEqual(selectionBoxes.Count(), dbSelectionBoxes.Count());
@@ -37,9 +37,9 @@ namespace SelectionBoxService.Tests.Tests
             SampleData Data = new SampleData(false);
 
             Mock<AyycornDb> MockDb = Data.Context();
-            Mock<DbSet<SelectionBox>> MockBoxesSet = Data.Boxes;
-            Mock<DbSet<Product>> MockProductsSet = Data.Products;
-            Mock<DbSet<SelectionBoxProduct>> MockBoxProductsSet = Data.BoxProducts;
+            Mock<DbSet<SelectionBox>> MockBoxesSet = Data.boxes;
+            Mock<DbSet<Product>> MockProductsSet = Data.products;
+            Mock<DbSet<SelectionBoxProduct>> MockBoxProductsSet = Data.boxProducts;
             
             SelectionBoxController Controller = new SelectionBoxController(MockDb.Object)
             {

@@ -17,7 +17,7 @@ namespace SelectionBoxService.Tests.Tests
         [TestMethod]
         public async Task ServiceTestRemove()
         {
-            HttpResponseMessage response = await Controller.DeleteSelectionBox(2);
+            HttpResponseMessage response = await controller.DeleteSelectionBox(2);
 
             Assert.IsTrue(response.IsSuccessStatusCode);
         }

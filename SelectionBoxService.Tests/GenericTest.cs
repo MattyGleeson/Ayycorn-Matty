@@ -16,23 +16,23 @@ namespace SelectionBoxService.Tests.Tests
 {
     public class GenericTest
     {
-        public SelectionBoxController Controller;
-        public Mock<AyycornDb> MockDb;
-        public Mock<DbSet<SelectionBox>> MockBoxesSet;
-        public Mock<DbSet<Product>> MockProductsSet;
-        public Mock<DbSet<SelectionBoxProduct>> MockBoxProductsSet;
-        public SampleData Data;
+        public SelectionBoxController controller;
+        public Mock<AyycornDb> mockDb;
+        public Mock<DbSet<SelectionBox>> mockBoxesSet;
+        public Mock<DbSet<Product>> mockProductsSet;
+        public Mock<DbSet<SelectionBoxProduct>> mockBoxProductsSet;
+        public SampleData data;
 
         [TestInitialize]
         public void Init()
         {
-            Data = new SampleData();
-            MockBoxesSet = Data.Boxes;
-            MockProductsSet = Data.Products;
-            MockBoxProductsSet = Data.BoxProducts;
-            MockDb = Data.Context();
+            data = new SampleData();
+            mockBoxesSet = data.boxes;
+            mockProductsSet = data.products;
+            mockBoxProductsSet = data.boxProducts;
+            mockDb = data.Context();
 
-            Controller = new SelectionBoxController(MockDb.Object)
+            controller = new SelectionBoxController(mockDb.Object)
             {
                 Request = new HttpRequestMessage(),
                 Configuration = new HttpConfiguration()

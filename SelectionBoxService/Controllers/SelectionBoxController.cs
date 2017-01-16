@@ -17,14 +17,14 @@ namespace SelectionBoxService.Controllers
     /// </summary>
     public class SelectionBoxController : ApiController
     {
-        private AyycornDb db;
+        private AyycornDb _db;
 
         /// <summary>
         /// Default constructor that sets the database to be an instance of AyycornDb
         /// </summary>
         public SelectionBoxController()
         {
-            db = new AyycornDb();
+            _db = new AyycornDb();
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace SelectionBoxService.Controllers
         /// <param name="db"></param>
         public SelectionBoxController(AyycornDb db)
         {
-            this.db = db;
+            this._db = db;
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace SelectionBoxService.Controllers
         [HttpGet]
         public async Task<HttpResponseMessage> GetAllSelectionBoxes()
         {
-            IEnumerable<SelectionBox> res = await db.SelectionBoxes.Where(b => b.Removed != true).ToListAsync();
+            IEnumerable<SelectionBox> res = await _db.SelectionBoxes.Where(b => b.Removed != true).ToListAsync();
 
             IEnumerable<Giftbox> boxes = res.Select(b => CreateBoxFromDbBox(b));
 
@@ -62,7 +62,7 @@ namespace SelectionBoxService.Controllers
         [HttpGet]
         public async Task<HttpResponseMessage> GetSelectionBox(int id)
         {
-            SelectionBox res = await db.SelectionBoxes.Where(b => b.Removed != true && b.Id == id).FirstOrDefaultAsync();
+            SelectionBox res = await _db.SelectionBoxes.Where(b => b.Removed != true && b.Id == id).FirstOrDefaultAsync();
 
             if (res != null)
                 return Request.CreateResponse(HttpStatusCode.OK, CreateBoxFromDbBox(res));
@@ -81,7 +81,7 @@ namespace SelectionBoxService.Controllers
         {
             try
             {
-                SelectionBox newBox = db.SelectionBoxes.Add(new SelectionBox
+                SelectionBox newBox = _db.SelectionBoxes.Add(new SelectionBox
                 {
                     Total = gb.Total,
                     WrappingId = gb.WrappingId,
@@ -94,7 +94,7 @@ namespace SelectionBoxService.Controllers
                     Available = gb.Available,
                     Id = gb.Id != 0 ? gb.Id : 0
                 });
-                await db.SaveChangesAsync();
+                await _db.SaveChangesAsync();
 
                 if (gb.Products != null)
                 {
@@ -104,26 +104,26 @@ namespace SelectionBoxService.Controllers
 
                         if (dbProd == null)
                         {
-                            dbProd = db.Products.Add(new Data.Product
+                            dbProd = _db.Products.Add(new Data.Product
                             {
                                 Name = product.Name,
                                 Store = product.StoreName,
                                 ProductId = product.Id
                             });
-                            await db.SaveChangesAsync();
+                            await _db.SaveChangesAsync();
                         }
 
 
                         if (await CheckIfSelectionBoxProductIsValid(dbProd.Id, newBox.Id))
                         {
-                            db.SelectionBoxProducts.Add(new SelectionBoxProduct
+                            _db.SelectionBoxProducts.Add(new SelectionBoxProduct
                             {
                                 ProductId = dbProd.Id,
                                 Product = dbProd,
                                 SelectionBoxId = newBox.Id,
                                 SelectionBox = newBox
                             });
-                            await db.SaveChangesAsync();
+                            await _db.SaveChangesAsync();
                         }
                     }
                 }
@@ -147,11 +147,11 @@ namespace SelectionBoxService.Controllers
         {
             try
             {
-                SelectionBox selectionBox = await db.SelectionBoxes.Where(sb => sb.Id == id).FirstOrDefaultAsync();
+                SelectionBox selectionBox = await _db.SelectionBoxes.Where(sb => sb.Id == id).FirstOrDefaultAsync();
                 selectionBox.Removed = true;
 
-                db.SetModified(selectionBox);
-                await db.SaveChangesAsync();
+                _db.SetModified(selectionBox);
+                await _db.SaveChangesAsync();
 
                 return Request.CreateResponse(HttpStatusCode.OK, "Success");
             }
@@ -173,7 +173,7 @@ namespace SelectionBoxService.Controllers
         {
             try
             {
-                Data.SelectionBox selectionBox = await db.SelectionBoxes.Where(sb => sb.Id == Id).FirstOrDefaultAsync();
+                Data.SelectionBox selectionBox = await _db.SelectionBoxes.Where(sb => sb.Id == Id).FirstOrDefaultAsync();
 
                 selectionBox.Available = postObject.Available;
                 selectionBox.Removed = postObject.Removed;
@@ -185,8 +185,8 @@ namespace SelectionBoxService.Controllers
                 selectionBox.WrappingTypeId = postObject.WrappingTypeId;
                 selectionBox.WrappingTypeName = postObject.WrappingTypeName;
 
-                db.SetModified(selectionBox);
-                await db.SaveChangesAsync();
+                _db.SetModified(selectionBox);
+                await _db.SaveChangesAsync();
 
                 Giftbox res = CreateBoxFromDbBox(selectionBox);
 
@@ -206,7 +206,7 @@ namespace SelectionBoxService.Controllers
         /// <returns></returns>
         private async Task<Data.Product> GetProduct(string name, string store)
         {
-            return await db.Products.Where(p => p.Name == name && p.Store == store).FirstOrDefaultAsync();
+            return await _db.Products.Where(p => p.Name == name && p.Store == store).FirstOrDefaultAsync();
         }
 
         /// <summary>
@@ -217,7 +217,7 @@ namespace SelectionBoxService.Controllers
         /// <returns></returns>
         private async Task<bool> CheckIfSelectionBoxProductIsValid(int prod, int selectionBox)
         {
-            return !(await db.SelectionBoxProducts.AnyAsync(sb => (sb.ProductId == prod) && (sb.SelectionBoxId == selectionBox)));
+            return !(await _db.SelectionBoxProducts.AnyAsync(sb => (sb.ProductId == prod) && (sb.SelectionBoxId == selectionBox)));
         }
 
         /// <summary>

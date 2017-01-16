@@ -15,38 +15,38 @@ namespace WebApi.Tests.Tests
     [TestClass]
     public class UnitTests
     {
-        private readonly JsonSerializerSettings SerializerSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore };
-        private List<Giftbox> Boxes;
-        private string BaseUrl = "http://ayycornselectionboxservice.azurewebsites.net/";
-        private string json;
+        private readonly JsonSerializerSettings _serializerSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore };
+        private List<Giftbox> _boxes;
+        private string _baseUrl = "http://ayycornselectionboxservice.azurewebsites.net/";
+        private string _json;
 
         [TestInitialize]
         public void Init()
         {
-            json = System.IO.File.ReadAllText("../../Data/selectionboxes.json");
-            Boxes = JsonConvert.DeserializeObject<List<Giftbox>>(json, SerializerSettings);
+            _json = System.IO.File.ReadAllText("../../Data/selectionboxes.json");
+            _boxes = JsonConvert.DeserializeObject<List<Giftbox>>(_json, _serializerSettings);
         }
 
         [TestMethod]
         public async Task FacadeTestGet()
         {
-            var MockHttp = new MockHttpMessageHandler();
-            MockHttp.When(BaseUrl + "getboxes").Respond("application/json", json);
-            SelectionBoxServiceFacade Facade = new SelectionBoxServiceFacade(new HttpClient(MockHttp));
+            var mockHttp = new MockHttpMessageHandler();
+            mockHttp.When(_baseUrl + "getboxes").Respond("application/json", _json);
+            SelectionBoxServiceFacade facade = new SelectionBoxServiceFacade(new HttpClient(mockHttp));
 
-            var response = await Facade.GetSelectionBoxes();
+            var response = await facade.GetSelectionBoxes();
 
-            CollectionAssert.AreEqual(response.ToList(), Boxes, new GiftboxComparer());
+            CollectionAssert.AreEqual(response.ToList(), _boxes, new GiftboxComparer());
         }
 
         [TestMethod]
         public async Task FacadeTestGetFailureHandling()
         {
             var mockFailHttp = new MockHttpMessageHandler();
-            mockFailHttp.When(BaseUrl + "getboxes").Respond(HttpStatusCode.InternalServerError);
-            SelectionBoxServiceFacade FailFacade = new SelectionBoxServiceFacade(new HttpClient(mockFailHttp));
+            mockFailHttp.When(_baseUrl + "getboxes").Respond(HttpStatusCode.InternalServerError);
+            SelectionBoxServiceFacade failFacade = new SelectionBoxServiceFacade(new HttpClient(mockFailHttp));
 
-            var response = await FailFacade.GetSelectionBoxes();
+            var response = await failFacade.GetSelectionBoxes();
 
             Assert.AreEqual(response.Count(), 0);
         }
@@ -54,25 +54,25 @@ namespace WebApi.Tests.Tests
         [TestMethod]
         public async Task FacadeTestPost()
         {
-            var MockHttp = new MockHttpMessageHandler();
-            string json = JsonConvert.SerializeObject(Boxes.ElementAt(1));
+            var mockHttp = new MockHttpMessageHandler();
+            string json = JsonConvert.SerializeObject(_boxes.ElementAt(1));
 
-            MockHttp.When(BaseUrl + "postbox").Respond("application/json", json);
-            SelectionBoxServiceFacade Facade = new SelectionBoxServiceFacade(new HttpClient(MockHttp));
+            mockHttp.When(_baseUrl + "postbox").Respond("application/json", json);
+            SelectionBoxServiceFacade facade = new SelectionBoxServiceFacade(new HttpClient(mockHttp));
 
-            var response = await Facade.PostSelectionBox(Boxes.ElementAt(1));
+            var response = await facade.PostSelectionBox(_boxes.ElementAt(1));
 
-            Assert.AreEqual(response.Id, Boxes.ElementAt(1).Id);
+            Assert.AreEqual(response.Id, _boxes.ElementAt(1).Id);
         }
 
         [TestMethod]
         public async Task FacadeTestPostFailureHandling()
         {
             var mockFailHttp = new MockHttpMessageHandler();
-            mockFailHttp.When(BaseUrl + "postbox").Respond(HttpStatusCode.InternalServerError);
-            SelectionBoxServiceFacade FailFacade = new SelectionBoxServiceFacade(new HttpClient(mockFailHttp));
+            mockFailHttp.When(_baseUrl + "postbox").Respond(HttpStatusCode.InternalServerError);
+            SelectionBoxServiceFacade failFacade = new SelectionBoxServiceFacade(new HttpClient(mockFailHttp));
 
-            var response = await FailFacade.PostSelectionBox(Boxes.ElementAt(1));
+            var response = await failFacade.PostSelectionBox(_boxes.ElementAt(1));
 
             Assert.IsNull(response);
         }
@@ -80,14 +80,14 @@ namespace WebApi.Tests.Tests
         [TestMethod]
         public async Task FacadeTestPut()
         {
-            Boxes.ElementAt(1).Available = false;
-            string json = JsonConvert.SerializeObject(Boxes.ElementAt(1));
+            _boxes.ElementAt(1).Available = false;
+            string json = JsonConvert.SerializeObject(_boxes.ElementAt(1));
 
-            var MockHttp = new MockHttpMessageHandler();
-            MockHttp.When(BaseUrl + "updatebox/" + Boxes.ElementAt(1).Id).Respond("application/json", json);
-            SelectionBoxServiceFacade Facade = new SelectionBoxServiceFacade(new HttpClient(MockHttp));
+            var mockHttp = new MockHttpMessageHandler();
+            mockHttp.When(_baseUrl + "updatebox/" + _boxes.ElementAt(1).Id).Respond("application/json", json);
+            SelectionBoxServiceFacade facade = new SelectionBoxServiceFacade(new HttpClient(mockHttp));
 
-            var response = await Facade.UpdateSelectionBox(Boxes.ElementAt(1));
+            var response = await facade.UpdateSelectionBox(_boxes.ElementAt(1));
 
             Assert.IsFalse(response.Available);
         }
@@ -95,14 +95,14 @@ namespace WebApi.Tests.Tests
         [TestMethod]
         public async Task FacadeTestPutFailureHandling()
         {
-            Boxes.ElementAt(2).Available = false;
-            string json = JsonConvert.SerializeObject(Boxes.ElementAt(2));
+            _boxes.ElementAt(2).Available = false;
+            string json = JsonConvert.SerializeObject(_boxes.ElementAt(2));
 
-            var MockFailHttp = new MockHttpMessageHandler();
-            MockFailHttp.When(BaseUrl + "updatebox/" + Boxes.ElementAt(2).Id).Respond(HttpStatusCode.InternalServerError);
-            SelectionBoxServiceFacade FailFacade = new SelectionBoxServiceFacade(new HttpClient(MockFailHttp));
+            var mockFailHttp = new MockHttpMessageHandler();
+            mockFailHttp.When(_baseUrl + "updatebox/" + _boxes.ElementAt(2).Id).Respond(HttpStatusCode.InternalServerError);
+            SelectionBoxServiceFacade failFacade = new SelectionBoxServiceFacade(new HttpClient(mockFailHttp));
 
-            var response = await FailFacade.UpdateSelectionBox(Boxes.ElementAt(2));
+            var response = await failFacade.UpdateSelectionBox(_boxes.ElementAt(2));
 
             Assert.IsNull(response);
         }
@@ -110,11 +110,11 @@ namespace WebApi.Tests.Tests
         [TestMethod]
         public async Task FacadeTestDelete()
         {
-            var MockHttp = new MockHttpMessageHandler();
-            MockHttp.When(BaseUrl + "deletebox/*").Respond(HttpStatusCode.OK);
-            SelectionBoxServiceFacade Facade = new SelectionBoxServiceFacade(new HttpClient(MockHttp));
+            var mockHttp = new MockHttpMessageHandler();
+            mockHttp.When(_baseUrl + "deletebox/*").Respond(HttpStatusCode.OK);
+            SelectionBoxServiceFacade facade = new SelectionBoxServiceFacade(new HttpClient(mockHttp));
 
-            var response = await Facade.RemoveSelectionBox(Boxes.ElementAt(1).Id);
+            var response = await facade.RemoveSelectionBox(_boxes.ElementAt(1).Id);
 
             Assert.IsTrue(response);
         }
@@ -122,11 +122,11 @@ namespace WebApi.Tests.Tests
         [TestMethod]
         public async Task FacadeTestDeleteFailurehandling()
         {
-            var MockHttp = new MockHttpMessageHandler();
-            MockHttp.When(BaseUrl + "deletebox/" + Boxes.ElementAt(1).Id).Respond(HttpStatusCode.InternalServerError);
-            SelectionBoxServiceFacade Facade = new SelectionBoxServiceFacade(new HttpClient(MockHttp));
+            var mockHttp = new MockHttpMessageHandler();
+            mockHttp.When(_baseUrl + "deletebox/" + _boxes.ElementAt(1).Id).Respond(HttpStatusCode.InternalServerError);
+            SelectionBoxServiceFacade facade = new SelectionBoxServiceFacade(new HttpClient(mockHttp));
 
-            var response = await Facade.RemoveSelectionBox(Boxes.ElementAt(1).Id);
+            var response = await facade.RemoveSelectionBox(_boxes.ElementAt(1).Id);
 
             Assert.IsFalse(response);
         }
@@ -135,7 +135,7 @@ namespace WebApi.Tests.Tests
     /// <summary>
     /// Compares LibAyycorn Giftboxes from results with each other by multiple fields.
     /// </summary>
-    /// <seealso cref="Product" />
+    /// <seealso cref="Giftbox" />
     internal class GiftboxComparer : Comparer<Giftbox>
     {
         public override int Compare(Giftbox x, Giftbox y)

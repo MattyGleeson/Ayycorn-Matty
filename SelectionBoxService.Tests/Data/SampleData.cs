@@ -12,31 +12,31 @@ namespace SelectionBoxService.Tests.Data
 {
     public class SampleData : MoqTestHandlers
     {
-        public Mock<DbSet<SelectionBox>> Boxes;
-        public Mock<DbSet<Product>> Products;
-        public Mock<DbSet<SelectionBoxProduct>> BoxProducts;
+        public Mock<DbSet<SelectionBox>> boxes;
+        public Mock<DbSet<Product>> products;
+        public Mock<DbSet<SelectionBoxProduct>> boxProducts;
 
         public SampleData()
         {
-            Boxes = GetSelectionBoxes();
-            Products = GetProducts();
-            BoxProducts = GetSelectionBoxProducts();
+            boxes = GetSelectionBoxes();
+            products = GetProducts();
+            boxProducts = GetSelectionBoxProducts();
         }
 
         public SampleData(bool data)
         {
-            Boxes = GetSelectionBoxes(data);
-            Products = GetProducts(data);
-            BoxProducts = GetSelectionBoxProducts(data);
+            boxes = GetSelectionBoxes(data);
+            products = GetProducts(data);
+            boxProducts = GetSelectionBoxProducts(data);
         }
 
         private Mock<DbSet<SelectionBox>> GetSelectionBoxes(bool data = true)
         {
-            IQueryable<SelectionBox> BoxesData;
+            IQueryable<SelectionBox> boxesData;
 
             if (data)
             {
-                BoxesData = new List<SelectionBox>()
+                boxesData = new List<SelectionBox>()
                 {
                     new SelectionBox() { Id = 1, Total = 10.0, WrappingId = 1, WrappingRangeId = 1, WrappingRangeName = "Swirl-Tastic", WrappingTypeId = 1, WrappingTypeName = "Gift Bag", Removed = false, Visible = true, Available = true },
                     new SelectionBox() { Id = 2, Total = 10.0, WrappingId = 1, WrappingRangeId = 1, WrappingRangeName = "Swirl-Tastic", WrappingTypeId = 1, WrappingTypeName = "Gift Bag", Removed = false, Visible = true, Available = true },
@@ -48,27 +48,27 @@ namespace SelectionBoxService.Tests.Data
             }
             else
             {
-                BoxesData = Enumerable.Empty<SelectionBox>().AsQueryable();
+                boxesData = Enumerable.Empty<SelectionBox>().AsQueryable();
             }
 
-            Mock<DbSet<SelectionBox>> MockBoxesSet = new Mock<DbSet<SelectionBox>>();
-            MockBoxesSet.As<IDbAsyncEnumerable<SelectionBox>>().Setup(m => m.GetAsyncEnumerator()).Returns(new TestDbAsyncEnumerator<SelectionBox>(BoxesData.GetEnumerator()));
-            MockBoxesSet.As<IQueryable<SelectionBox>>().Setup(m => m.Provider).Returns(new TestDbAsyncQueryProvider<SelectionBox>(BoxesData.Provider));
-            MockBoxesSet.As<IQueryable>().Setup(m => m.Provider).Returns(new TestDbAsyncQueryProvider<SelectionBox>(BoxesData.Provider));
-            MockBoxesSet.As<IQueryable<SelectionBox>>().Setup(m => m.Expression).Returns(BoxesData.Expression);
-            MockBoxesSet.As<IQueryable<SelectionBox>>().Setup(m => m.ElementType).Returns(BoxesData.ElementType);
-            MockBoxesSet.As<IQueryable<SelectionBox>>().Setup(m => m.GetEnumerator()).Returns(BoxesData.GetEnumerator());
-            MockBoxesSet.Setup(m => m.Add(It.IsAny<SelectionBox>())).Returns((SelectionBox r) => r);
+            Mock<DbSet<SelectionBox>> mockBoxesSet = new Mock<DbSet<SelectionBox>>();
+            mockBoxesSet.As<IDbAsyncEnumerable<SelectionBox>>().Setup(m => m.GetAsyncEnumerator()).Returns(new TestDbAsyncEnumerator<SelectionBox>(boxesData.GetEnumerator()));
+            mockBoxesSet.As<IQueryable<SelectionBox>>().Setup(m => m.Provider).Returns(new TestDbAsyncQueryProvider<SelectionBox>(boxesData.Provider));
+            mockBoxesSet.As<IQueryable>().Setup(m => m.Provider).Returns(new TestDbAsyncQueryProvider<SelectionBox>(boxesData.Provider));
+            mockBoxesSet.As<IQueryable<SelectionBox>>().Setup(m => m.Expression).Returns(boxesData.Expression);
+            mockBoxesSet.As<IQueryable<SelectionBox>>().Setup(m => m.ElementType).Returns(boxesData.ElementType);
+            mockBoxesSet.As<IQueryable<SelectionBox>>().Setup(m => m.GetEnumerator()).Returns(boxesData.GetEnumerator());
+            mockBoxesSet.Setup(m => m.Add(It.IsAny<SelectionBox>())).Returns((SelectionBox r) => r);
 
-            return MockBoxesSet;
+            return mockBoxesSet;
         }
 
         private Mock<DbSet<Product>> GetProducts(bool data = true)
         {
-            IQueryable<Product> ProductsData;
+            IQueryable<Product> productsData;
             if (data)
             {
-                ProductsData = new List<Product>()
+                productsData = new List<Product>()
                 {
                     new Product() { Id = 1, Name = "Product1", ProductId = 1, Store = "TestStore" },
                     new Product() { Id = 2, Name = "Product2", ProductId = 2, Store = "TestStore" },
@@ -77,83 +77,83 @@ namespace SelectionBoxService.Tests.Data
             }
             else
             {
-                ProductsData = Enumerable.Empty<Product>().AsQueryable();
+                productsData = Enumerable.Empty<Product>().AsQueryable();
             }
             
 
-            Mock<DbSet<Product>> MockProductsSet = new Mock<DbSet<Product>>();
-            MockProductsSet.As<IDbAsyncEnumerable<Product>>().Setup(m => m.GetAsyncEnumerator()).Returns(new TestDbAsyncEnumerator<Product>(ProductsData.GetEnumerator()));
-            MockProductsSet.As<IQueryable<Product>>().Setup(m => m.Provider).Returns(new TestDbAsyncQueryProvider<Product>(ProductsData.Provider));
-            MockProductsSet.As<IQueryable>().Setup(m => m.Provider).Returns(new TestDbAsyncQueryProvider<Product>(ProductsData.Provider));
-            MockProductsSet.As<IQueryable<Product>>().Setup(m => m.Expression).Returns(ProductsData.Expression);
-            MockProductsSet.As<IQueryable<Product>>().Setup(m => m.ElementType).Returns(ProductsData.ElementType);
-            MockProductsSet.As<IQueryable<Product>>().Setup(m => m.GetEnumerator()).Returns(ProductsData.GetEnumerator());
-            MockProductsSet.Setup(m => m.Add(It.IsAny<Product>())).Returns((Product r) => r);
+            Mock<DbSet<Product>> mockProductsSet = new Mock<DbSet<Product>>();
+            mockProductsSet.As<IDbAsyncEnumerable<Product>>().Setup(m => m.GetAsyncEnumerator()).Returns(new TestDbAsyncEnumerator<Product>(productsData.GetEnumerator()));
+            mockProductsSet.As<IQueryable<Product>>().Setup(m => m.Provider).Returns(new TestDbAsyncQueryProvider<Product>(productsData.Provider));
+            mockProductsSet.As<IQueryable>().Setup(m => m.Provider).Returns(new TestDbAsyncQueryProvider<Product>(productsData.Provider));
+            mockProductsSet.As<IQueryable<Product>>().Setup(m => m.Expression).Returns(productsData.Expression);
+            mockProductsSet.As<IQueryable<Product>>().Setup(m => m.ElementType).Returns(productsData.ElementType);
+            mockProductsSet.As<IQueryable<Product>>().Setup(m => m.GetEnumerator()).Returns(productsData.GetEnumerator());
+            mockProductsSet.Setup(m => m.Add(It.IsAny<Product>())).Returns((Product r) => r);
 
-            return MockProductsSet;
+            return mockProductsSet;
         }
 
         private Mock<DbSet<SelectionBoxProduct>> GetSelectionBoxProducts(bool data = true)
         {
-            IEnumerable<SelectionBox> Boxes = GetSelectionBoxes(false).Object.ToList();
-            IEnumerable<Product> Prods = GetProducts(false).Object.ToList();
-            IQueryable<SelectionBoxProduct> BoxProductsData;
+            IEnumerable<SelectionBox> boxes = GetSelectionBoxes(false).Object.ToList();
+            IEnumerable<Product> prods = GetProducts(false).Object.ToList();
+            IQueryable<SelectionBoxProduct> boxProductsData;
             if (data)
             {
-                BoxProductsData = new List<SelectionBoxProduct>()
+                boxProductsData = new List<SelectionBoxProduct>()
                 {
-                    CreateSelectionBoxProd(1, 1, 1, Boxes, Prods),
-                    CreateSelectionBoxProd(2, 1, 2, Boxes, Prods),
-                    CreateSelectionBoxProd(3, 2, 1, Boxes, Prods),
-                    CreateSelectionBoxProd(4, 2, 3, Boxes, Prods),
-                    CreateSelectionBoxProd(5, 3, 2, Boxes, Prods),
-                    CreateSelectionBoxProd(6, 3, 3, Boxes, Prods),
-                    CreateSelectionBoxProd(7, 4, 1, Boxes, Prods),
-                    CreateSelectionBoxProd(8, 4, 2, Boxes, Prods),
-                    CreateSelectionBoxProd(9, 5, 1, Boxes, Prods),
-                    CreateSelectionBoxProd(10, 5, 3, Boxes, Prods),
-                    CreateSelectionBoxProd(11, 6, 2, Boxes, Prods),
-                    CreateSelectionBoxProd(12, 6, 3, Boxes, Prods)
+                    CreateSelectionBoxProd(1, 1, 1, boxes, prods),
+                    CreateSelectionBoxProd(2, 1, 2, boxes, prods),
+                    CreateSelectionBoxProd(3, 2, 1, boxes, prods),
+                    CreateSelectionBoxProd(4, 2, 3, boxes, prods),
+                    CreateSelectionBoxProd(5, 3, 2, boxes, prods),
+                    CreateSelectionBoxProd(6, 3, 3, boxes, prods),
+                    CreateSelectionBoxProd(7, 4, 1, boxes, prods),
+                    CreateSelectionBoxProd(8, 4, 2, boxes, prods),
+                    CreateSelectionBoxProd(9, 5, 1, boxes, prods),
+                    CreateSelectionBoxProd(10, 5, 3, boxes, prods),
+                    CreateSelectionBoxProd(11, 6, 2, boxes, prods),
+                    CreateSelectionBoxProd(12, 6, 3, boxes, prods)
                 }.AsQueryable();
             }
             else
             {
-                BoxProductsData = Enumerable.Empty<SelectionBoxProduct>().AsQueryable();
+                boxProductsData = Enumerable.Empty<SelectionBoxProduct>().AsQueryable();
             }
 
-            Mock<DbSet<SelectionBoxProduct>> MockBoxProductsSet = new Mock<DbSet<SelectionBoxProduct>>();
-            MockBoxProductsSet.As<IDbAsyncEnumerable<SelectionBoxProduct>>().Setup(m => m.GetAsyncEnumerator()).Returns(new TestDbAsyncEnumerator<SelectionBoxProduct>(BoxProductsData.GetEnumerator()));
-            MockBoxProductsSet.As<IQueryable<SelectionBoxProduct>>().Setup(m => m.Provider).Returns(new TestDbAsyncQueryProvider<SelectionBoxProduct>(BoxProductsData.Provider));
-            MockBoxProductsSet.As<IQueryable>().Setup(m => m.Provider).Returns(new TestDbAsyncQueryProvider<SelectionBoxProduct>(BoxProductsData.Provider));
-            MockBoxProductsSet.As<IQueryable<SelectionBoxProduct>>().Setup(m => m.Expression).Returns(BoxProductsData.Expression);
-            MockBoxProductsSet.As<IQueryable<SelectionBoxProduct>>().Setup(m => m.ElementType).Returns(BoxProductsData.ElementType);
-            MockBoxProductsSet.As<IQueryable<SelectionBoxProduct>>().Setup(m => m.GetEnumerator()).Returns(BoxProductsData.GetEnumerator());
-            MockBoxProductsSet.Setup(m => m.Add(It.IsAny<SelectionBoxProduct>())).Returns((SelectionBoxProduct r) => r);
+            Mock<DbSet<SelectionBoxProduct>> mockBoxProductsSet = new Mock<DbSet<SelectionBoxProduct>>();
+            mockBoxProductsSet.As<IDbAsyncEnumerable<SelectionBoxProduct>>().Setup(m => m.GetAsyncEnumerator()).Returns(new TestDbAsyncEnumerator<SelectionBoxProduct>(boxProductsData.GetEnumerator()));
+            mockBoxProductsSet.As<IQueryable<SelectionBoxProduct>>().Setup(m => m.Provider).Returns(new TestDbAsyncQueryProvider<SelectionBoxProduct>(boxProductsData.Provider));
+            mockBoxProductsSet.As<IQueryable>().Setup(m => m.Provider).Returns(new TestDbAsyncQueryProvider<SelectionBoxProduct>(boxProductsData.Provider));
+            mockBoxProductsSet.As<IQueryable<SelectionBoxProduct>>().Setup(m => m.Expression).Returns(boxProductsData.Expression);
+            mockBoxProductsSet.As<IQueryable<SelectionBoxProduct>>().Setup(m => m.ElementType).Returns(boxProductsData.ElementType);
+            mockBoxProductsSet.As<IQueryable<SelectionBoxProduct>>().Setup(m => m.GetEnumerator()).Returns(boxProductsData.GetEnumerator());
+            mockBoxProductsSet.Setup(m => m.Add(It.IsAny<SelectionBoxProduct>())).Returns((SelectionBoxProduct r) => r);
 
-            return MockBoxProductsSet;
+            return mockBoxProductsSet;
         }
 
         public Mock<AyycornDb> Context()
         {
-            Mock < AyycornDb > MockDb = new Mock<AyycornDb>();
-            MockDb.Setup(m => m.SelectionBoxes).Returns(Boxes.Object);
-            MockDb.Setup(m => m.Products).Returns(Products.Object);
-            MockDb.Setup(m => m.SelectionBoxProducts).Returns(BoxProducts.Object);
-            MockDb.Setup(m => m.SetModified(It.IsAny<object>())).Callback((object entity) => { });
+            Mock < AyycornDb > mockDb = new Mock<AyycornDb>();
+            mockDb.Setup(m => m.SelectionBoxes).Returns(boxes.Object);
+            mockDb.Setup(m => m.Products).Returns(products.Object);
+            mockDb.Setup(m => m.SelectionBoxProducts).Returns(boxProducts.Object);
+            mockDb.Setup(m => m.SetModified(It.IsAny<object>())).Callback((object entity) => { });
 
-            return MockDb;
+            return mockDb;
         }
 
-        private SelectionBoxProduct CreateSelectionBoxProd(int Id, int SBoxId, int ProdId,
-            IEnumerable<SelectionBox> Boxes, IEnumerable<Product> Products)
+        private SelectionBoxProduct CreateSelectionBoxProd(int id, int sBoxId, int prodId,
+            IEnumerable<SelectionBox> boxes, IEnumerable<Product> products)
         {
             return new SelectionBoxProduct()
             {
-                Id = Id,
-                SelectionBoxId = SBoxId,
-                SelectionBox = Boxes.Where(b => b.Id == SBoxId).FirstOrDefault(),
-                ProductId = ProdId,
-                Product = Products.Where(p => p.Id == ProdId).FirstOrDefault()
+                Id = id,
+                SelectionBoxId = sBoxId,
+                SelectionBox = boxes.Where(b => b.Id == sBoxId).FirstOrDefault(),
+                ProductId = prodId,
+                Product = products.Where(p => p.Id == prodId).FirstOrDefault()
             };
         }
     }

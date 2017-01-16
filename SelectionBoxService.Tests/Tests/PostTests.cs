@@ -19,7 +19,7 @@ namespace SelectionBoxService.Tests.Tests
         [TestMethod]
         public async Task ServiceTestPostNoProducts()
         {
-            HttpResponseMessage response = await Controller.PostSelectionBox(new LibAyycorn.Dtos.Giftbox
+            HttpResponseMessage response = await controller.PostSelectionBox(new LibAyycorn.Dtos.Giftbox
             {
                 Id = 7,
                 Total = 10.0,
@@ -35,14 +35,14 @@ namespace SelectionBoxService.Tests.Tests
 
             Assert.IsTrue(response.IsSuccessStatusCode);
 
-            MockBoxesSet.Verify(m => m.Add(It.IsAny<SelectionBox>()), Times.Once);
-            MockDb.Verify(m => m.SaveChangesAsync(), Times.Once);
+            mockBoxesSet.Verify(m => m.Add(It.IsAny<SelectionBox>()), Times.Once);
+            mockDb.Verify(m => m.SaveChangesAsync(), Times.Once);
         }
 
         [TestMethod]
         public async Task ServiceTestPostSingleProduct()
         {
-            HttpResponseMessage response = await Controller.PostSelectionBox(new LibAyycorn.Dtos.Giftbox
+            HttpResponseMessage response = await controller.PostSelectionBox(new LibAyycorn.Dtos.Giftbox
             {
                 Id = 7,
                 Total = 10.0,
@@ -67,16 +67,16 @@ namespace SelectionBoxService.Tests.Tests
 
             Assert.IsTrue(response.IsSuccessStatusCode);
 
-            MockBoxesSet.Verify(m => m.Add(It.IsAny<SelectionBox>()), Times.Once);
-            MockBoxProductsSet.Verify(m => m.Add(It.IsAny<SelectionBoxProduct>()), Times.Once);
-            MockProductsSet.Verify(m => m.Add(It.IsAny<Product>()), Times.Once);
-            MockDb.Verify(m => m.SaveChangesAsync(), Times.Exactly(3));
+            mockBoxesSet.Verify(m => m.Add(It.IsAny<SelectionBox>()), Times.Once);
+            mockBoxProductsSet.Verify(m => m.Add(It.IsAny<SelectionBoxProduct>()), Times.Once);
+            mockProductsSet.Verify(m => m.Add(It.IsAny<Product>()), Times.Once);
+            mockDb.Verify(m => m.SaveChangesAsync(), Times.Exactly(3));
         }
 
         [TestMethod]
         public async Task ServiceTestPostMultipleProducts()
         {
-            HttpResponseMessage response = await Controller.PostSelectionBox(new LibAyycorn.Dtos.Giftbox
+            HttpResponseMessage response = await controller.PostSelectionBox(new LibAyycorn.Dtos.Giftbox
             {
                 Id = 8,
                 Total = 10.0,
@@ -107,16 +107,16 @@ namespace SelectionBoxService.Tests.Tests
 
             Assert.IsTrue(response.IsSuccessStatusCode);
 
-            MockBoxesSet.Verify(m => m.Add(It.IsAny<SelectionBox>()), Times.Once);
-            MockBoxProductsSet.Verify(m => m.Add(It.IsAny<SelectionBoxProduct>()), Times.Exactly(2));
-            MockProductsSet.Verify(m => m.Add(It.IsAny<Product>()), Times.Exactly(2));
-            MockDb.Verify(m => m.SaveChangesAsync(), Times.Exactly(5));
+            mockBoxesSet.Verify(m => m.Add(It.IsAny<SelectionBox>()), Times.Once);
+            mockBoxProductsSet.Verify(m => m.Add(It.IsAny<SelectionBoxProduct>()), Times.Exactly(2));
+            mockProductsSet.Verify(m => m.Add(It.IsAny<Product>()), Times.Exactly(2));
+            mockDb.Verify(m => m.SaveChangesAsync(), Times.Exactly(5));
         }
 
         [TestMethod]
         public async Task ServiceTestPostExistingProduct()
         {
-            HttpResponseMessage response = await Controller.PostSelectionBox(new LibAyycorn.Dtos.Giftbox
+            HttpResponseMessage response = await controller.PostSelectionBox(new LibAyycorn.Dtos.Giftbox
             {
                 Id = 9,
                 Total = 10.0,
@@ -141,16 +141,16 @@ namespace SelectionBoxService.Tests.Tests
 
             Assert.IsTrue(response.IsSuccessStatusCode);
 
-            MockBoxesSet.Verify(m => m.Add(It.IsAny<SelectionBox>()), Times.Once);
-            MockBoxProductsSet.Verify(m => m.Add(It.IsAny<SelectionBoxProduct>()), Times.Once);
-            MockProductsSet.Verify(m => m.Add(It.IsAny<Product>()), Times.Never);
-            MockDb.Verify(m => m.SaveChangesAsync(), Times.Exactly(2));
+            mockBoxesSet.Verify(m => m.Add(It.IsAny<SelectionBox>()), Times.Once);
+            mockBoxProductsSet.Verify(m => m.Add(It.IsAny<SelectionBoxProduct>()), Times.Once);
+            mockProductsSet.Verify(m => m.Add(It.IsAny<Product>()), Times.Never);
+            mockDb.Verify(m => m.SaveChangesAsync(), Times.Exactly(2));
         }
 
         [TestMethod]
         public async Task ServiceTestPostNull()
         {
-            HttpResponseMessage response = await Controller.PostSelectionBox(null);
+            HttpResponseMessage response = await controller.PostSelectionBox(null);
 
             Assert.IsTrue(!response.IsSuccessStatusCode);
             Assert.AreEqual(response.StatusCode, HttpStatusCode.InternalServerError);

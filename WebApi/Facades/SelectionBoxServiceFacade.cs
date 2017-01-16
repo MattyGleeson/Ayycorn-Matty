@@ -16,18 +16,18 @@ namespace WebApi.Facades
     /// </summary>
     public class SelectionBoxServiceFacade : ApiController
     {
-        private readonly HttpClient client;
-        private readonly string BaseUrl = "http://ayycornselectionboxservice.azurewebsites.net/";
-        protected JsonSerializerSettings SerializerSettings;
+        private readonly HttpClient _client;
+        private readonly string _baseUrl = "http://ayycornselectionboxservice.azurewebsites.net/";
+        private JsonSerializerSettings _serializerSettings;
 
         /// <summary>
         /// Default constructor that sets up the HttpClient and JsonSerializerSettings.
         /// </summary>
         public SelectionBoxServiceFacade()
         {
-            client = new HttpClient();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            SerializerSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore };
+            _client = new HttpClient();
+            _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _serializerSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore };
         }
 
         /// <summary>
@@ -36,8 +36,8 @@ namespace WebApi.Facades
         /// <param name="client"></param>
         public SelectionBoxServiceFacade(HttpClient client)
         {
-            this.client = client;
-            SerializerSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore };
+            this._client = client;
+            _serializerSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore };
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace WebApi.Facades
                 HttpRequestMessage request = new HttpRequestMessage
                 {
                     Method = HttpMethod.Get,
-                    RequestUri = new Uri(BaseUrl + "getboxes")
+                    RequestUri = new Uri(_baseUrl + "getboxes")
                 };
 
                 IQueryable< LibAyycorn.Dtos.Giftbox > res = await ExecuteRequestAsyncList<LibAyycorn.Dtos.Giftbox>(request);
@@ -78,7 +78,7 @@ namespace WebApi.Facades
                 HttpRequestMessage request = new HttpRequestMessage
                 {
                     Method = HttpMethod.Get,
-                    RequestUri = new Uri(BaseUrl + "getbox/" + id)
+                    RequestUri = new Uri(_baseUrl + "getbox/" + id)
                 };
 
                 return await ExecuteRequestAsync<LibAyycorn.Dtos.Giftbox>(request);
@@ -101,7 +101,7 @@ namespace WebApi.Facades
                 HttpRequestMessage request = new HttpRequestMessage
                 {
                     Method = HttpMethod.Put,
-                    RequestUri = new Uri(BaseUrl + "postbox"),
+                    RequestUri = new Uri(_baseUrl + "postbox"),
                     Content = new StringContent(JsonConvert.SerializeObject(selectionBox), Encoding.UTF8, "application/json")
                 };
 
@@ -125,7 +125,7 @@ namespace WebApi.Facades
                 HttpRequestMessage request = new HttpRequestMessage
                 {
                     Method = HttpMethod.Put,
-                    RequestUri = new Uri(BaseUrl + "updatebox/" + selectionBox.Id),
+                    RequestUri = new Uri(_baseUrl + "updatebox/" + selectionBox.Id),
                     Content = new StringContent(JsonConvert.SerializeObject(selectionBox), Encoding.UTF8, "application/json")
                 };
 
@@ -149,10 +149,10 @@ namespace WebApi.Facades
                 HttpRequestMessage request = new HttpRequestMessage
                 {
                     Method = HttpMethod.Delete,
-                    RequestUri = new Uri(BaseUrl + "deletebox/" + id)
+                    RequestUri = new Uri(_baseUrl + "deletebox/" + id)
                 };
 
-                HttpResponseMessage response = await client.SendAsync(request);
+                HttpResponseMessage response = await _client.SendAsync(request);
                 response.EnsureSuccessStatusCode();
 
                 return true;
@@ -171,10 +171,10 @@ namespace WebApi.Facades
         /// <returns></returns>
         private async Task<T> ExecuteRequestAsync<T>(HttpRequestMessage request) where T : class
         {
-            HttpResponseMessage response = await client.SendAsync(request);
+            HttpResponseMessage response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
             string content = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<T>(content, SerializerSettings);
+            return JsonConvert.DeserializeObject<T>(content, _serializerSettings);
         }
 
         /// <summary>
@@ -185,10 +185,10 @@ namespace WebApi.Facades
         /// <returns></returns>
         private async Task<IQueryable<T>> ExecuteRequestAsyncList<T>(HttpRequestMessage request) where T : class
         {
-            HttpResponseMessage response = await client.SendAsync(request);
+            HttpResponseMessage response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
             string content = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<List<T>>(content, SerializerSettings).AsQueryable();
+            return JsonConvert.DeserializeObject<List<T>>(content, _serializerSettings).AsQueryable();
         }
     }
 }
