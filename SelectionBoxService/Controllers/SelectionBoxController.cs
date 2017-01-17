@@ -89,9 +89,9 @@ namespace SelectionBoxService.Controllers
                     WrappingRangeName = gb.WrappingRangeName,
                     WrappingTypeId = gb.WrappingTypeId,
                     WrappingTypeName = gb.WrappingTypeName,
-                    Removed = gb.Removed,
-                    Visible = gb.Visible,
-                    Available = gb.Available,
+                    Removed = false,
+                    Visible = true,
+                    Available = true,
                     Id = gb.Id != 0 ? gb.Id : 0
                 });
                 await _db.SaveChangesAsync();

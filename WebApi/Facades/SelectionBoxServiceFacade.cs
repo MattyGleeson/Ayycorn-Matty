@@ -89,6 +89,36 @@ namespace WebApi.Facades
             }
         }
 
+        public async Task<IQueryable<LibAyycorn.Dtos.Giftbox>> GetByFilters(double minPrice = 0, double maxPrice = 0, string wrappingTypeName = null,
+            string wrappingRangeName = null, bool? available = null, bool? visible = null)
+        {
+            try
+            {
+                HttpRequestMessage request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = new Uri(_baseUrl + "getboxes")
+                };
+
+                IQueryable<LibAyycorn.Dtos.Giftbox> res = await ExecuteRequestAsyncList<LibAyycorn.Dtos.Giftbox>(request);
+
+                res = res.Where(g => g.Total >= minPrice);
+                res = res.Where(g => g.Total <= (maxPrice == 0 ? Double.MaxValue : maxPrice));
+                if (wrappingTypeName != null) res = res.Where(g => g.WrappingTypeName == wrappingTypeName);
+                if (wrappingRangeName != null) res = res.Where(g => g.WrappingRangeName == wrappingRangeName);
+                if (available != null) res = res.Where(g => g.Available == available);
+                if (visible != null) res = res.Where(g => g.Visible == visible);
+
+                return res.Any()
+                    ? res
+                    : Enumerable.Empty<LibAyycorn.Dtos.Giftbox>().AsQueryable();
+            }
+            catch(Exception ex)
+            {
+                return Enumerable.Empty<LibAyycorn.Dtos.Giftbox>().AsQueryable();
+            }
+        }
+
         /// <summary>
         /// Posts a selection box the service and returns the updated model.
         /// </summary>
@@ -100,7 +130,7 @@ namespace WebApi.Facades
             {
                 HttpRequestMessage request = new HttpRequestMessage
                 {
-                    Method = HttpMethod.Put,
+                    Method = HttpMethod.Post,
                     RequestUri = new Uri(_baseUrl + "postbox"),
                     Content = new StringContent(JsonConvert.SerializeObject(selectionBox), Encoding.UTF8, "application/json")
                 };

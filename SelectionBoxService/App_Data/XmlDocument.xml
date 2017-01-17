@@ -481,6 +481,22 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="T:SelectionBoxService.Controllers.SelectionBoxController">
+            <summary>
+            Selectionbox service controller containing the endpoints used to GET, POST, PUT and DELETE.
+            </summary>
+        </member>
+        <member name="M:SelectionBoxService.Controllers.SelectionBoxController.#ctor">
+            <summary>
+            Default constructor that sets the database to be an instance of AyycornDb
+            </summary>
+        </member>
+        <member name="M:SelectionBoxService.Controllers.SelectionBoxController.#ctor(SelectionBoxService.Data.AyycornDb)">
+            <summary>
+            Constructor used when unit testing to pass a mock of the AyycornDb
+            </summary>
+            <param name="db"></param>
+        </member>
         <member name="M:SelectionBoxService.Controllers.SelectionBoxController.GetAllSelectionBoxes">
             <summary>
             Gets all selection boxes from the database.
@@ -514,6 +530,36 @@
             </summary>
             <param name="Id"></param>
             <param name="postObject"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SelectionBoxService.Controllers.SelectionBoxController.GetProduct(System.String,System.String)">
+            <summary>
+            Returns a database product model using the name and the store.
+            </summary>
+            <param name="name"></param>
+            <param name="store"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SelectionBoxService.Controllers.SelectionBoxController.CheckIfSelectionBoxProductIsValid(System.Int32,System.Int32)">
+            <summary>
+            Checks to see if a row with the same properties already exists in the database.
+            </summary>
+            <param name="prod"></param>
+            <param name="selectionBox"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SelectionBoxService.Controllers.SelectionBoxController.GetProductsForBox(SelectionBoxService.Data.SelectionBox)">
+            <summary>
+            Returns a list of products from the selection box parameter.
+            </summary>
+            <param name="box"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SelectionBoxService.Controllers.SelectionBoxController.CreateBoxFromDbBox(SelectionBoxService.Data.SelectionBox)">
+            <summary>
+            Returns a giftbox model using the database selection box parameter.
+            </summary>
+            <param name="box"></param>
             <returns></returns>
         </member>
     </members>
